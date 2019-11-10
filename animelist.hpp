@@ -54,6 +54,8 @@ public:
     void setCategoryIndex(int categoryIndex);
     const QString &category() const;
 
+    Q_INVOKABLE void nextPage();
+
     AnimeModel *model() const;
 
     bool gettingList() const;
@@ -73,6 +75,8 @@ private:
     QNetworkAccessManager *m_networkManager;
     bool m_gettingList = false;
     int m_categoryIndex = 0;
+    int m_pageNumber = 1;
+    void initGet(const QString page, const QString cat);
 };
 
 #endif // ANIMELIST_HPP

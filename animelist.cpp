@@ -32,7 +32,6 @@ void AnimeList::requestFinished(QNetworkReply *r) {
     QJsonDocument reply = QJsonDocument::fromJson(r->readAll(), &parseErr);
     Q_ASSERT(parseErr.error == QJsonParseError::NoError);
 
-    m_model->clear();
     auto object = reply.object();
     auto animeArray = object["top"].toArray();
     qDebug() << "got " << animeArray.size() << " animes";
@@ -52,6 +51,7 @@ void AnimeList::requestFinished(QNetworkReply *r) {
         newAnime.setMembers(obj["members"].toInt());
         newAnime.setScore(obj["score"].toDouble());
 
+        qDebug() << newAnime.title() << newAnime.malId();
         m_model->addAnime(std::move(newAnime));
     }
 
@@ -72,14 +72,25 @@ void AnimeList::setCategoryIndex(int categoryIndex) {
     m_categoryIndex = categoryIndex;
     emit categoryIndexChanged(m_categoryIndex);
 
+    m_model->clear();
+    initGet(QString::number(m_pageNumber = 1), category());
+}
+
+void AnimeList::initGet(const QString page, const QString cat) {
+    if (m_gettingList)
+        return;
+
     m_gettingList = true;
     emit gettingListChanged(m_gettingList);
 
-    m_networkManager->get(QNetworkRequest(
-        QUrl(QString("https://api.jikan.moe/v3/top/anime/%1/%2").arg("1", category()))));
+    m_networkManager->get(
+        QNetworkRequest(QUrl(QString("https://api.jikan.moe/v3/top/anime/%1/%2").arg(page, cat))));
 }
 
+
 const QString &AnimeList::category() const { return categoryList()[m_categoryIndex]; }
+
+void AnimeList::nextPage() { initGet(QString::number(++m_pageNumber), category()); }
 
 void AnimeModel::clear() {
     beginResetModel();

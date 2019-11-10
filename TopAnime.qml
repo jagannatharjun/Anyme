@@ -103,6 +103,11 @@ Rectangle {
             visible: true
         }
 
+        onAtYEndChanged: {
+            if (atYEnd)
+                animelist.nextPage();
+        }
+
         id: animeGrid
         anchors.rightMargin: 0
         boundsBehavior: Flickable.StopAtBounds

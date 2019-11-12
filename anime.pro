@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         anime.cpp \
         animelist.cpp \
+        application.cpp \
         main.cpp
 
 RESOURCES += qml.qrc
@@ -33,6 +34,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     anime.hpp \
-    animelist.hpp
+    animelist.hpp \
+    application.hpp
 
 DISTFILES +=

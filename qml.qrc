@@ -6,5 +6,7 @@
         <file>font/BigShouldersText-Medium.ttf</file>
         <file>font/Montserrat-Regular.otf</file>
         <file>font/MontserratAlternates-SemiBold.otf</file>
+        <file>icon/menu-24px.svg</file>
+        <file>anime.qml</file>
     </qresource>
 </RCC>

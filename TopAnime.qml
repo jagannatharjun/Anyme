@@ -5,29 +5,6 @@ import QtQuick.Controls.Material 2.13
 
 Rectangle {
     visible: true
-    anchors.fill: parent
-
-    FontLoader {
-        id: varelaFont
-        source: 'qrc:/font/VarelaRound-Regular.otf'
-    }
-
-    FontLoader {
-        id: bigShoulder
-        source: 'qrc:/font/BigShouldersText-Medium.ttf'
-    }
-
-    FontLoader {
-        id: sansSerif
-        source: 'qrc:/font/Montserrat-Regular.otf'
-    }
-
-    FontLoader {
-        id: sansSerifBold
-        source: "qrc:/font/MontserratAlternates-SemiBold.otf"
-    }
-
-    property alias myFont: bigShoulder
 
     Material.theme: Material.Dark
     color: Material.background
@@ -72,18 +49,14 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        cellHeight: 320
-        cellWidth: 200
 
         onWidthChanged: {
-            let normalHeight = 320
-            let normalWidth = 200
+            let normalHeight = 240
+            let normalWidth = 136
 
             let normalColumnCount = Math.floor(width / normalWidth)
             let normalRequiredWidth = normalColumnCount * normalWidth
             let leftWidth = width - normalRequiredWidth - ScrollBar.vertical.width
-            if (leftWidth > -14 && leftWidth < 14)
-                return // bear with it
             if (leftWidth < 0) {
                 cellWidth += (leftWidth / normalColumnCount)
                 cellHeight = normalHeight * cellWidth / normalWidth
@@ -119,10 +92,10 @@ Rectangle {
             width: animeGrid.cellWidth
             height: animeGrid.cellHeight
 
-            border.width: 4
-            border.color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
+//            border.width: 4
+//            border.color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
 
-            color: 'transparent'
+            color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
 
             Item {
                 anchors.fill: parent
@@ -142,20 +115,23 @@ Rectangle {
                     anchors.top: img.bottom
                     anchors.left: img.left
                     width: parent.width
-                    height: 56
+                    height: ribbionHeight
+                    visible: mouseArea.containsMouse && false
                     color: Material.frameColor
-                    Text {
-                        anchors.margins: 2
-                        anchors.fill: parent
-                        font.family: sansSerifBold.name
-                        text: title
-                        color: Material.foreground
-                        verticalAlignment: Text.AlignTop
-                        wrapMode: Text.WordWrap
-                        font.bold: true
-                        font.pointSize: 10
-                        elide: Text.ElideRight
-                    }
+                    id : txtRect
+                }
+
+                Text {
+                    anchors.margins: 2
+                    anchors.fill: txtRect
+                    font.family: sansSerifBold.name
+                    text: title
+                    color: Material.foreground
+                    verticalAlignment: Text.AlignTop
+                    wrapMode: Text.WordWrap
+                    font.bold: true
+                    font.pointSize: 10
+                    elide: Text.ElideRight
                 }
             }
 

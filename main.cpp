@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     a.setCategoryIndex(1);
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/MainWindow.qml"));
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated, &app,
         [url](QObject *obj, const QUrl &objUrl) {
@@ -36,15 +36,15 @@ int main(int argc, char *argv[]) {
     ctx->setContextProperty("animelist", &a);
 
     QFileSystemWatcher f;
-    f.addPath("E:/Cpp/Projects/Gui/anime/TopAnime.qml");
+    f.addPath("E:/Cpp/Projects/Gui/anime/mainWindow.qml");
     f.connect(&f, &QFileSystemWatcher::fileChanged, [&](const QString &p) {
         v.setSource(QUrl());
         v.engine()->clearComponentCache();
-        v.setSource(QUrl("file:///E:/Cpp/Projects/Gui/anime/TopAnime.qml"));
+        v.setSource(QUrl("file:///E:/Cpp/Projects/Gui/anime/mainWindow.qml"));
         f.addPath(p);
     });
 
-    v.setSource(QUrl("file:///E:/Cpp/Projects/Gui/anime/TopAnime.qml"));
+    v.setSource(QUrl("file:///E:/Cpp/Projects/Gui/anime/mainWindow.qml"));
     v.resize(800,400);
     v.show();
 #else

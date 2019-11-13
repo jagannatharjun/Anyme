@@ -30,7 +30,6 @@ AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
 }
 
 void AnimeDetailsProvider::parseJsonDetails(AnimeDetailsRequest *rq, const QByteArray &data) {
-
     QJsonParseError err;
     QJsonDocument doc(QJsonDocument::fromJson(data, &err));
     if (err.error != QJsonParseError::NoError) {
@@ -43,15 +42,25 @@ void AnimeDetailsProvider::parseJsonDetails(AnimeDetailsRequest *rq, const QByte
     }
 
     QJsonObject obj(doc.object());
+    qDebug() << obj;
     rq->setAnimeDetailsProp("malId", obj["mal_id"].toString());
     rq->setAnimeDetailsProp("title", obj["title"].toString());
     rq->setAnimeDetailsProp("englistTitle", obj["title_english"].toString());
     rq->setAnimeDetailsProp("japaneseTitle", obj["title_japanese"].toString());
     rq->setAnimeDetailsProp("source", obj["source"].toString());
-    rq->setAnimeDetailsProp("episodes", obj["episodes"].isNull() ? -1 : obj["episodes"].toInt());
+    rq->setAnimeDetailsProp("episodes",obj["episodes"].toInt());
     rq->setAnimeDetailsProp("status", obj["status"].toString());
     rq->setAnimeDetailsProp("duration", obj["duration"].toString());
     rq->setAnimeDetailsProp("imageUrl", obj["image_url"].toString());
+    rq->setAnimeDetailsProp("score", obj["score"].toDouble());
+    rq->setAnimeDetailsProp("scoredBy", obj["scored_by"].toInt());
+    rq->setAnimeDetailsProp("rank", obj["rank"].toInt());
+    rq->setAnimeDetailsProp("popularity", obj["popularity"].toInt());
+    rq->setAnimeDetailsProp("members", obj["members"].toInt());
+    rq->setAnimeDetailsProp("broadcast", obj["broadcast"].toString());
+    rq->setAnimeDetailsProp("premiered", obj["premiered"].toString());
+    rq->setAnimeDetailsProp("duration", obj["duration"].toString());
+    rq->setAnimeDetailsProp("synopsis", obj["synopsis"].toString());
 
     qDebug(__PRETTY_FUNCTION__);
     rq->setStatus(AnimeDetailsRequest::Completed);

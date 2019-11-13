@@ -9,5 +9,9 @@
         <file>icon/menu-24px.svg</file>
         <file>qml/anime.qml</file>
         <file>qml/MyFonts.qml</file>
+        <file>font/BigShouldersDisplay-Regular.ttf</file>
+        <file>font/Oswald-Regular.ttf</file>
+        <file>font/Oswald-Light.ttf</file>
+        <file>font/Oswald-Medium.ttf</file>
     </qresource>
 </RCC>

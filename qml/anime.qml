@@ -82,6 +82,31 @@ Rectangle {
         id: japaneseTitle
     }
 
+    Text {
+        anchors.top: parent.top
+        anchors.topMargin: 6
+        anchors.right: parent.right
+        anchors.rightMargin: 16
+        text: anime.rating
+        font.family: bigShoulderRegular.name
+        font.pixelSize: 21
+        font.weight: Font.Medium
+        color: Material.accent
+        id: ratingText
+
+
+    }
+
+    Rectangle {
+        x: ratingText.x - border.width - 2
+        y: ratingText.y - border.width - 1
+        width: ratingText.width + (border.width * 2) + 4
+        height: ratingText.height + (border.width * 2) + 2
+        color: 'transparent'
+        border.color: Material.accent
+        border.width: 2
+    }
+
     Row {
         x: 306
         y: 44

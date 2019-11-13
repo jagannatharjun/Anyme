@@ -28,7 +28,8 @@ Rectangle {
                 font.family: myFont.name
                 font.pointSize: 16
                 font.underline: animelist.categoryIndex == index
-                color: Material.foreground
+                color: animelist.gettingList ? Qt.darker(
+                                                   Material.foreground) : Material.foreground
                 text: model.modelData
                 rightPadding: 12
                 bottomPadding: 12
@@ -98,7 +99,7 @@ Rectangle {
 
             Item {
                 anchors.fill: parent
-                anchors.margins: 6
+                anchors.margins: 8
 
                 Image {
                     anchors.left: parent.left

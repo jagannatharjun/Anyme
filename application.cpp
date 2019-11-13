@@ -1,15 +1,17 @@
 #include "application.hpp"
 #include "animelistmodelprovider.hpp"
 
-#include <QQmlContext>
 #include <QDebug>
+#include <QQmlContext>
 
 #define LIVE_QML
 
 #ifdef LIVE_QML
 #include <QFileSystemWatcher>
 #include <QQuickView>
-#define MYQMLPATH(FILE) "E:/Cpp/Projects/Gui/anime/qml/" FILE
+#define QMLDIR "E:/Cpp/Projects/Gui/anime/qml/"
+#define MYQMLPATH(FILE) QMLDIR FILE
+static QFileSystemWatcher *qmlWatcher;
 #endif
 
 Application::Application(int &argc, char **argv)
@@ -29,18 +31,20 @@ void Application::loadAnimeInfo(int malId) {
 void Application::load(const QString &path, const QVector<QQmlContext::PropertyPair> &props) {
 #ifdef LIVE_QML
     auto view = new QQuickView();
-    auto urlWatcher = new QFileSystemWatcher(this);
-    urlWatcher->addPath(path);
+    if (!qmlWatcher) {
+        qmlWatcher = new QFileSystemWatcher(this);
+        qmlWatcher->addPath(QMLDIR);
+    }
     view->rootContext()->setContextProperties(props);
     setContext(view->rootContext());
     view->setSource(QUrl::fromLocalFile(path));
-    connect(urlWatcher, &QFileSystemWatcher::fileChanged, [view, urlWatcher](const QString &p) {
+    connect(qmlWatcher, &QFileSystemWatcher::directoryChanged, [view, path](const QString &) {
         view->setSource(QUrl());
         view->engine()->clearComponentCache();
-        view->setSource(QUrl::fromLocalFile(p));
-        urlWatcher->addPath(p);
+        view->setSource(QUrl::fromLocalFile(path));
+        qmlWatcher->addPath(QMLDIR);
     });
-    view->resize(800,600);
+    view->resize(800, 600);
     view->show();
 #else
     static_assert(0, "lol");

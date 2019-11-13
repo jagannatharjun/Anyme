@@ -43,12 +43,14 @@ void AnimeListModelProvider::setCategoryIndex(int categoryIndex) {
     emit categoryIndexChanged(m_categoryIndex);
 
     m_model->clear();
+    setGettingList(true);
     m_animeListProvider->requestAnimeList(m_pageNumber, m_categoryIndex);
 }
 
 const QString &AnimeListModelProvider::category() const { return categoryList()[m_categoryIndex]; }
 
 void AnimeListModelProvider::nextPage() {
+    setGettingList(true);
     m_animeListProvider->requestAnimeList(++m_pageNumber, m_categoryIndex);
 }
 

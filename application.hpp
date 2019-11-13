@@ -3,6 +3,7 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 class AnimeList;
 
@@ -11,11 +12,13 @@ class Application : public QGuiApplication {
 public:
     explicit Application(int &argc, char **argv);
 
+    Q_INVOKABLE void loadAnimeInfo(int malId);
+
 private:
     QQmlApplicationEngine m_engine;
     AnimeList *m_animeList;
 
-    void liveLoad(const QString &path);
+    void load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
     void setContext(QQmlContext *ctx);
 };
 

@@ -51,7 +51,6 @@ void AnimeList::requestFinished(QNetworkReply *r) {
         newAnime.setMembers(obj["members"].toInt());
         newAnime.setScore(obj["score"].toDouble());
 
-        qDebug() << newAnime.title() << newAnime.malId();
         m_model->addAnime(std::move(newAnime));
     }
 
@@ -87,7 +86,6 @@ void AnimeList::initGet(const QString page, const QString cat) {
         QNetworkRequest(QUrl(QString("https://api.jikan.moe/v3/top/anime/%1/%2").arg(page, cat))));
 }
 
-
 const QString &AnimeList::category() const { return categoryList()[m_categoryIndex]; }
 
 void AnimeList::nextPage() { initGet(QString::number(++m_pageNumber), category()); }
@@ -96,6 +94,13 @@ void AnimeModel::clear() {
     beginResetModel();
     m_animes.clear();
     endResetModel();
+}
+
+Anime AnimeModel::getAnimeById(int id) const {
+    auto f = std::find_if(m_animes.cbegin(), m_animes.cend(),
+                          [id](const Anime &a) { return a.malId() == id; });
+    Q_ASSERT(f != m_animes.cend());
+    return *f;
 }
 
 void AnimeModel::addAnime(Anime anime) {
@@ -112,36 +117,29 @@ QVariant AnimeModel::data(const QModelIndex &index, int role) const {
 
     const Anime &anime = m_animes[index.row()];
     switch (static_cast<AnimalRoles>(role)) {
+    case MalIdRole:
+        return anime.malId();
     case RankRole:
         return anime.rank();
-        break;
     case TitleRole:
         return anime.title();
-        break;
     case UrlRole:
         return anime.url();
-        break;
     case ImageUrlRole:
         return anime.imageUrl();
-        break;
     case TypeRole:
         return anime.type();
-        break;
     case EpisodesRole:
         return anime.episodes();
-        break;
     case StartDateRole:
         return anime.startDate();
         break;
     case EndDateRole:
         return anime.endDate();
-        break;
     case MembersRole:
         return anime.members();
-        break;
     case ScoreRole:
         return anime.score();
-        break;
     }
 
     return QVariant();
@@ -149,6 +147,7 @@ QVariant AnimeModel::data(const QModelIndex &index, int role) const {
 
 QHash<int, QByteArray> AnimeModel::roleNames() const {
     QHash<int, QByteArray> roles;
+    roles[MalIdRole] = "malId";
     roles[RankRole] = "rank";
     roles[TitleRole] = "title";
     roles[UrlRole] = "url";

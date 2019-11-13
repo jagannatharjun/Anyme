@@ -19,7 +19,7 @@ Rectangle {
     }
 
     Row {
-        id : categoryList
+        id: categoryList
         y: topText.y + topText.height + 2
         Repeater {
             model: animelist.categoryList()
@@ -57,17 +57,15 @@ Rectangle {
             let normalColumnCount = Math.floor(width / normalWidth)
             let normalRequiredWidth = normalColumnCount * normalWidth
             let leftWidth = width - normalRequiredWidth - ScrollBar.vertical.width
-            if (leftWidth < 0) {
-                cellWidth += (leftWidth / normalColumnCount)
-                cellHeight = normalHeight * cellWidth / normalWidth
-            } else {
+            if (leftWidth > 0) {
                 let tilesCanBeAdded = leftWidth / normalWidth
                 if (tilesCanBeAdded >= 1) {
                     normalColumnCount += tilesCanBeAdded
                 }
-                cellWidth = (width - ScrollBar.vertical.width) / normalColumnCount
-                cellHeight = normalHeight * cellWidth / normalWidth
             }
+
+            cellWidth = (width - ScrollBar.vertical.width) / normalColumnCount
+            cellHeight = normalHeight * cellWidth / normalWidth
         }
 
         clip: true
@@ -77,8 +75,10 @@ Rectangle {
         }
 
         onAtYEndChanged: {
-            if (atYEnd)
-                animelist.nextPage();
+            if (atYEnd) {
+                print("at end")
+                animelist.nextPage()
+            }
         }
 
         id: animeGrid
@@ -92,9 +92,8 @@ Rectangle {
             width: animeGrid.cellWidth
             height: animeGrid.cellHeight
 
-//            border.width: 4
-//            border.color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
-
+            //            border.width: 4
+            //            border.color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
             color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
 
             Item {
@@ -118,7 +117,7 @@ Rectangle {
                     height: ribbionHeight
                     visible: mouseArea.containsMouse && false
                     color: Material.frameColor
-                    id : txtRect
+                    id: txtRect
                 }
 
                 Text {
@@ -139,6 +138,7 @@ Rectangle {
                 anchors.fill: parent
                 hoverEnabled: true
                 id: mouseArea
+                onClicked: application.loadAnimeInfo(malId)
             }
         }
     }

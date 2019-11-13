@@ -11,7 +11,6 @@ Rectangle {
     //    height: 400
     anchors.fill: parent
 
-
     FontLoader {
         id: varelaFont
         source: 'qrc:/font/VarelaRound-Regular.otf'
@@ -34,13 +33,11 @@ Rectangle {
 
     property alias myFont: bigShoulder
 
-    readonly property int leftBarWidth: 256
-
     Material.theme: Material.Dark
     color: Material.background
 
-    Pane {
-        Material.elevation: 12
+    Rectangle {
+        color: Material.toolBarColor
         id: topBar
         anchors.top: parent.top
 
@@ -48,68 +45,65 @@ Rectangle {
         anchors.left: parent.left
         height: Material.dialogButtonBoxHeight
 
-        background: Rectangle {
-            color: Material.toolBarColor
-
-            Rectangle {
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: leftBar.width
-                color: Qt.darker(parent.color)
-
-                Text {
-                    font.family: myFont.name
-                    font.pointSize: 12
-                    x: menuIcon.x + menuIcon.width + 4
-                    y: menuIcon.y
-                    text: 'MENU'
-                    color: Material.foreground
-                    visible: leftBar.state == 'VISIBLE'
-                }
-            }
-
-            Image {
-                id: menuIcon
-                width: 24
-                height: 24
-                x: 10
-                anchors.verticalCenter: parent.verticalCenter
-                sourceSize.height: 24
-                sourceSize.width: 24
-                source: "qrc:/icon/menu-24px.svg"
-                fillMode: Image.PreserveAspectFit
-
-                ColorOverlay {
-                    source: menuIcon
-                    anchors.fill: parent
-                    color: menuIconMouseArea.containsMouse ? Material.accent : Material.foreground
-                }
-
-                MouseArea {
-                    hoverEnabled: true
-                    anchors.fill: parent
-                    id: menuIconMouseArea
-                    onClicked: leftBar.state = leftBar.state == 'COLLAPSED' ? 'VISIBLE' : 'COLLAPSED'
-                }
-            }
+        Rectangle {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: leftBar.width
+            color: Qt.darker(parent.color)
 
             Text {
-                text: 'Anime'
-                x: leftBar.state == 'COLLAPSED' ? menuIcon.x + menuIcon.width + 8: leftBar.x + leftBar.width + 8
-                anchors.verticalCenter: parent.verticalCenter
                 font.family: myFont.name
-                font.pointSize: 20
+                font.pointSize: 12
+                x: menuIcon.x + menuIcon.width + 4
+                y: menuIcon.y
+                text: 'MENU'
                 color: Material.foreground
+                visible: leftBar.state == 'VISIBLE'
             }
+        }
+
+        Image {
+            id: menuIcon
+            width: 24
+            height: 24
+            x: 10
+            anchors.verticalCenter: parent.verticalCenter
+            sourceSize.height: 24
+            sourceSize.width: 24
+            source: "qrc:/icon/menu-24px.svg"
+            fillMode: Image.PreserveAspectFit
+
+            ColorOverlay {
+                source: menuIcon
+                anchors.fill: parent
+                color: menuIconMouseArea.containsMouse ? Material.accent : Material.foreground
+            }
+
+            MouseArea {
+                hoverEnabled: true
+                anchors.fill: parent
+                id: menuIconMouseArea
+                onClicked: leftBar.state = leftBar.state == 'COLLAPSED' ? 'VISIBLE' : 'COLLAPSED'
+            }
+        }
+
+        Text {
+            text: 'Anime'
+            x: leftBar.state == 'COLLAPSED' ? menuIcon.x + menuIcon.width
+                                              + 8 : leftBar.x + leftBar.width + 8
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: myFont.name
+            font.pointSize: 20
+            color: Material.foreground
         }
     }
 
     DropShadow {
-        id: dropShadow
+        id: topBarShadow
         anchors.fill: topBar
-        horizontalOffset: 3
-        verticalOffset: 3
+        horizontalOffset: 5
+        verticalOffset: 5
         radius: 16
         samples: 32
         color: '#80000000'
@@ -125,12 +119,11 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         anchors.top: topBar.bottom
-        anchors.topMargin: 0
+        anchors.topMargin: topBarShadow.verticalOffset + topBarShadow.radius
     }
 
     Rectangle {
         id: leftBar
-        width: leftBarWidth
         color: "#ffffff"
         anchors.left: parent.left
         anchors.leftMargin: 0
@@ -140,7 +133,6 @@ Rectangle {
         anchors.topMargin: 0
 
         Component.onCompleted: state = 'COLLAPSED'
-
         states: [
             State {
                 name: "COLLAPSED"

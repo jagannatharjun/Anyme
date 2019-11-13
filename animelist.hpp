@@ -13,7 +13,8 @@ class AnimeModel : public QAbstractListModel {
     Q_OBJECT
 public:
     enum AnimalRoles {
-        RankRole = Qt::UserRole + 1,
+        MalIdRole = Qt::UserRole + 1,
+        RankRole,
         TitleRole,
         UrlRole,
         ImageUrlRole,
@@ -26,6 +27,8 @@ public:
     };
 
     void clear();
+    Anime getAnimeById(int id) const;
+
     AnimeModel(QObject *parent = 0) : QAbstractListModel(parent) {}
     void addAnime(Anime anime);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -43,7 +46,8 @@ class AnimeModel;
 class AnimeList : public QObject {
     Q_OBJECT
     Q_PROPERTY(AnimeModel *model READ model)
-    Q_PROPERTY(int categoryIndex READ categoryIndex WRITE setCategoryIndex NOTIFY categoryIndexChanged)
+    Q_PROPERTY(
+        int categoryIndex READ categoryIndex WRITE setCategoryIndex NOTIFY categoryIndexChanged)
     Q_PROPERTY(bool gettingList READ gettingList NOTIFY gettingListChanged)
 public:
     explicit AnimeList(QObject *parent = nullptr);

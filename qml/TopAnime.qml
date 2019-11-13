@@ -124,7 +124,8 @@ Rectangle {
                 Text {
                     anchors.margins: 2
                     anchors.fill: txtRect
-                    font.family: sansSerifBold.name
+
+                    font.family: fonts.sansSerifBold.name
                     text: title
                     color: Material.foreground
                     verticalAlignment: Text.AlignTop

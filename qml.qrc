@@ -8,5 +8,6 @@
         <file>font/MontserratAlternates-SemiBold.otf</file>
         <file>icon/menu-24px.svg</file>
         <file>qml/anime.qml</file>
+        <file>qml/MyFonts.qml</file>
     </qresource>
 </RCC>

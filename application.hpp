@@ -6,6 +6,7 @@
 #include <QQmlContext>
 
 class AnimeListModelProvider;
+class AnimeDetailsProvider;
 
 class Application : public QGuiApplication {
     Q_OBJECT
@@ -17,8 +18,9 @@ public:
 private:
     QQmlApplicationEngine m_engine;
     AnimeListModelProvider *m_animeList;
+    AnimeDetailsProvider *m_animeDetailsProvider;
 
-    void load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
+    QQmlContext *load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
     void setContext(QQmlContext *ctx);
 };
 

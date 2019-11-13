@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "animedetailsprovider.hpp"
 #include "animelistmodelprovider.hpp"
 
 #include <QDebug>
@@ -15,7 +16,8 @@ static QFileSystemWatcher *qmlWatcher;
 #endif
 
 Application::Application(int &argc, char **argv)
-    : QGuiApplication(argc, argv), m_animeList(new AnimeListModelProvider(this)) {
+    : QGuiApplication(argc, argv), m_animeList(new AnimeListModelProvider(this)),
+      m_animeDetailsProvider(new AnimeDetailsProvider(this)) {
 
     setContext(m_engine.rootContext());
 
@@ -24,11 +26,16 @@ Application::Application(int &argc, char **argv)
 
 void Application::loadAnimeInfo(int malId) {
     qDebug() << malId;
-    load(MYQMLPATH("anime.qml"),
-         {{"anime", QVariant::fromValue(m_animeList->model()->getAnimeById(malId))}});
+    auto ctx = load(MYQMLPATH("anime.qml"));
+    auto rq = m_animeDetailsProvider->requestAnimeDetails(malId);
+    connect(rq, &AnimeDetailsRequest::completed, [ctx](AnimeDetails *det) {
+        ctx->setContextProperty("anime", det);
+        qDebug() << det->dynamicPropertyNames();
+    });
 }
 
-void Application::load(const QString &path, const QVector<QQmlContext::PropertyPair> &props) {
+QQmlContext *Application::load(const QString &path,
+                               const QVector<QQmlContext::PropertyPair> &props) {
 #ifdef LIVE_QML
     auto view = new QQuickView();
     if (!qmlWatcher) {
@@ -38,14 +45,16 @@ void Application::load(const QString &path, const QVector<QQmlContext::PropertyP
     view->rootContext()->setContextProperties(props);
     setContext(view->rootContext());
     view->setSource(QUrl::fromLocalFile(path));
-    connect(qmlWatcher, &QFileSystemWatcher::directoryChanged, [view, path](const QString &) {
+    connect(qmlWatcher, &QFileSystemWatcher::directoryChanged, [view, path](const QString &p) {
+        qDebug() << "reloading " << path << " arg " << p;
         view->setSource(QUrl());
         view->engine()->clearComponentCache();
         view->setSource(QUrl::fromLocalFile(path));
         qmlWatcher->addPath(QMLDIR);
     });
-    view->resize(800, 600);
+    view->resize(900, 540);
     view->show();
+    return view->rootContext();
 #else
     static_assert(0, "lol");
 #endif

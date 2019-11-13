@@ -11,27 +11,11 @@ Rectangle {
     //    height: 400
     anchors.fill: parent
 
-    FontLoader {
-        id: varelaFont
-        source: 'qrc:/font/VarelaRound-Regular.otf'
+    MyFonts {
+        id: fonts
     }
 
-    FontLoader {
-        id: bigShoulder
-        source: 'qrc:/font/BigShouldersText-Medium.ttf'
-    }
-
-    FontLoader {
-        id: sansSerif
-        source: 'qrc:/font/Montserrat-Regular.otf'
-    }
-
-    FontLoader {
-        id: sansSerifBold
-        source: "qrc:/font/MontserratAlternates-SemiBold.otf"
-    }
-
-    property alias myFont: bigShoulder
+    property alias myFont: fonts.bigShoulder
 
     Material.theme: Material.Dark
     color: Material.background

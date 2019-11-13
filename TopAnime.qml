@@ -88,17 +88,16 @@ Rectangle {
         model: animelist.model
 
         delegate: Rectangle {
-            property int ribbionHeight: 56
+            readonly property int ribbionHeight: 56
             width: animeGrid.cellWidth
             height: animeGrid.cellHeight
-
             //            border.width: 4
             //            border.color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
             color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
 
             Item {
                 anchors.fill: parent
-                anchors.margins: 4
+                anchors.margins: 6
 
                 Image {
                     anchors.left: parent.left

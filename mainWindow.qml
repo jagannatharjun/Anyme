@@ -90,8 +90,8 @@ Rectangle {
 
         Text {
             text: 'Anime'
-            x: leftBar.state == 'COLLAPSED' ? menuIcon.x + menuIcon.width
-                                              + 8 : leftBar.x + leftBar.width + 8
+            x: menuIcon.x + menuIcon.width + 8
+            visible: leftBar.state == 'COLLAPSED'
             anchors.verticalCenter: parent.verticalCenter
             font.family: myFont.name
             font.pointSize: 20
@@ -124,7 +124,7 @@ Rectangle {
 
     Rectangle {
         id: leftBar
-        color: "#ffffff"
+        color: Qt.lighter(Material.backgroundColor)
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.bottom: parent.bottom
@@ -145,7 +145,7 @@ Rectangle {
                 name: "VISIBLE"
                 PropertyChanges {
                     target: leftBar
-                    width: leftBarWidth
+                    width: 256
                 }
             }
         ]

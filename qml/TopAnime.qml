@@ -31,6 +31,7 @@ Rectangle {
                 color: Material.foreground
                 text: model.modelData
                 rightPadding: 12
+                bottomPadding: 12
 
                 MouseArea {
                     anchors.fill: parent

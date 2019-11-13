@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>TopAnime.qml</file>
-        <file>MainWindow.qml</file>
+        <file>qml/TopAnime.qml</file>
+        <file>qml/MainWindow.qml</file>
         <file>font/VarelaRound-Regular.otf</file>
         <file>font/BigShouldersText-Medium.ttf</file>
         <file>font/Montserrat-Regular.otf</file>
         <file>font/MontserratAlternates-SemiBold.otf</file>
         <file>icon/menu-24px.svg</file>
-        <file>anime.qml</file>
+        <file>qml/anime.qml</file>
     </qresource>
 </RCC>

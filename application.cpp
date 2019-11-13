@@ -2,13 +2,14 @@
 #include "animelist.hpp"
 
 #include <QQmlContext>
+#include <QDebug>
 
 #define LIVE_QML
 
 #ifdef LIVE_QML
 #include <QFileSystemWatcher>
 #include <QQuickView>
-#define MYQMLPATH(FILE) "E:/Cpp/Projects/Gui/anime/" FILE
+#define MYQMLPATH(FILE) "E:/Cpp/Projects/Gui/anime/qml/" FILE
 #endif
 
 Application::Application(int &argc, char **argv)
@@ -20,6 +21,7 @@ Application::Application(int &argc, char **argv)
 }
 
 void Application::loadAnimeInfo(int malId) {
+    qDebug() << malId;
     load(MYQMLPATH("anime.qml"),
          {{"anime", QVariant::fromValue(m_animeList->model()->getAnimeById(malId))}});
 }

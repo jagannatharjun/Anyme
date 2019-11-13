@@ -6,13 +6,12 @@
 
 #include "anime.hpp"
 
-class QNetworkReply;
-class QNetworkAccessManager;
+class AnimeListProvider;
 
-class AnimeModel : public QAbstractListModel {
+class AnimeListModel : public QAbstractListModel {
     Q_OBJECT
 public:
-    enum AnimalRoles {
+    enum AnimeRoles {
         MalIdRole = Qt::UserRole + 1,
         RankRole,
         TitleRole,
@@ -29,7 +28,7 @@ public:
     void clear();
     Anime getAnimeById(int id) const;
 
-    AnimeModel(QObject *parent = 0) : QAbstractListModel(parent) {}
+    AnimeListModel(QObject *parent = 0) : QAbstractListModel(parent) {}
     void addAnime(Anime anime);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -41,16 +40,17 @@ private:
     QVector<Anime> m_animes;
 };
 
-class AnimeModel;
+class AnimeListModel;
 
-class AnimeList : public QObject {
+class AnimeListModelProvider : public QObject {
     Q_OBJECT
-    Q_PROPERTY(AnimeModel *model READ model)
+    Q_PROPERTY(AnimeListModel *model READ model)
     Q_PROPERTY(
         int categoryIndex READ categoryIndex WRITE setCategoryIndex NOTIFY categoryIndexChanged)
-    Q_PROPERTY(bool gettingList READ gettingList NOTIFY gettingListChanged)
+    Q_PROPERTY(bool gettingList READ gettingList WRITE setGettingList NOTIFY gettingListChanged)
+
 public:
-    explicit AnimeList(QObject *parent = nullptr);
+    explicit AnimeListModelProvider(QObject *parent = nullptr);
 
     Q_INVOKABLE static QStringList categoryList();
 
@@ -59,28 +59,21 @@ public:
     const QString &category() const;
 
     Q_INVOKABLE void nextPage();
-
-    AnimeModel *model() const;
-
+    AnimeListModel *model() const;
     bool gettingList() const;
 
 signals:
     void categoryIndexChanged(int categoryIndex);
-
     void gettingListChanged(bool gettingList);
 
-public slots:
-
-private slots:
-    void requestFinished(QNetworkReply *);
-
 private:
-    AnimeModel *m_model;
-    QNetworkAccessManager *m_networkManager;
+    AnimeListModel *m_model;
+    AnimeListProvider *m_animeListProvider;
     bool m_gettingList = false;
     int m_categoryIndex = 0;
     int m_pageNumber = 1;
-    void initGet(const QString page, const QString cat);
+
+    void setGettingList(bool gettingList);
 };
 
 #endif // ANIMELIST_HPP

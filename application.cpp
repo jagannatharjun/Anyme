@@ -1,5 +1,5 @@
 #include "application.hpp"
-#include "animelist.hpp"
+#include "animelistmodelprovider.hpp"
 
 #include <QQmlContext>
 #include <QDebug>
@@ -13,7 +13,7 @@
 #endif
 
 Application::Application(int &argc, char **argv)
-    : QGuiApplication(argc, argv), m_animeList(new AnimeList(this)) {
+    : QGuiApplication(argc, argv), m_animeList(new AnimeListModelProvider(this)) {
 
     setContext(m_engine.rootContext());
 

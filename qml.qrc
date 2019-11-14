@@ -13,5 +13,7 @@
         <file>font/Oswald-Regular.ttf</file>
         <file>font/Oswald-Light.ttf</file>
         <file>font/Oswald-Medium.ttf</file>
+        <file>icon/logo.png</file>
+        <file>icon/drop-down.png</file>
     </qresource>
 </RCC>

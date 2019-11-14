@@ -84,6 +84,7 @@ Rectangle {
     }
 
     Component.onCompleted: animelist.categoryIndex = 0
+
     Rectangle {
         id: darkOverlay
         anchors.right: parent.right
@@ -110,6 +111,90 @@ Rectangle {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.top: parent.top
+        clip: true
+
+        Image {
+            id: img
+            source: 'qrc:/icon/logo.png'
+            width: 81
+            height: 104
+            x: 11
+            y: 17
+        }
+
+        Text {
+            anchors.verticalCenter: img.verticalCenter
+            x: 117
+            font.family: fonts.bigShoulder.name
+            color: theme.primaryForeground
+            text: 'ANIME'
+            font.pixelSize: 30
+        }
+
+        Rectangle {
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            y: 134
+            height: 2
+            color: theme.background
+            id: logoSeperator
+        }
+
+        Text {
+            anchors.top: logoSeperator.bottom
+            anchors.left: logoSeperator.left
+            anchors.leftMargin: 4
+            font.family: fonts.bigShoulder.name
+            color: theme.primaryForeground
+            text: 'Top'
+            font.pixelSize: 26
+            id: topTxt
+        }
+
+        Image {
+            anchors.right: logoSeperator.right
+            anchors.verticalCenter: topTxt.verticalCenter
+            source: 'qrc:/icon/drop-down.png'
+            transformOrigin: Item.Center
+            rotation: catlist.visible ? 0 : 180
+            MouseArea {
+                anchors.fill: parent
+                onClicked: catlist.visible = !catlist.visible
+            }
+        }
+
+        ListView {
+            id: catlist
+            anchors.top: topTxt.bottom
+            height: contentHeight
+            interactive: false
+            model: animelist.categoryList()
+
+            delegate: Rectangle {
+                width: leftBar.width
+                height: 34
+                color: mouseArea.containsMouse ? theme.primaryDark : 'transparent'
+
+                MouseArea {
+                    anchors.fill: parent
+                    id: mouseArea
+                    onClicked: animelist.categoryIndex = index
+                    hoverEnabled: true
+
+                }
+
+                Text {
+                    x : topTxt.x + 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.family: fonts.bigShoulder.name
+                    color: theme.primaryForeground
+                    text: model.modelData
+                    font.pixelSize: 20
+                }
+            }
+        }
 
         Component.onCompleted: state = 'COLLAPSED'
         states: [

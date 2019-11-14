@@ -67,23 +67,26 @@ void Application::setContext(QQmlContext *ctx) {
 }
 
 Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
-//    insert("primary", QColor("#6200EE"));
-//    insert("primaryDark", QColor("#3700B3"));
-//    insert("primaryForeground", QColor(Qt::white));
-//    insert("primarySurface", QColor(Qt::white));
+    insert("primary", QColor("#6200EE"));
+    insert("primaryDark", QColor("#3700B3"));
+    insert("primaryForeground", QColor(Qt::white));
+
+    insert("accent", QColor("#03dac5"));
+    insert("accentForeground", QColor(Qt::white));
+
+    insert("background", QColor("#303030"));
+    insert("foreground", QColor(Qt::white));
+
+    insert("disabledText", QColor(96,96,96));
+
+//    insert("accent", QColor());
+
+//    insert("primary", QColor(Qt::white));
+//    insert("primaryDark", QColor(Qt::white));
+//    insert("primaryForeground", QColor(Qt::black));
+//    insert("primarySurface", QColor(Qt::black));
 //    insert("primarySurfaceForegound", QColor(Qt::black));
 
-//    insert("background", QColor("#303030"));
+//    insert("background", QColor(Qt::white));
 //    insert("foreground", QColor(Qt::black));
-
-    insert("accent", QColor());
-
-    insert("primary", QColor(Qt::white));
-    insert("primaryDark", QColor(Qt::white));
-    insert("primaryForeground", QColor(Qt::black));
-    insert("primarySurface", QColor(Qt::black));
-    insert("primarySurfaceForegound", QColor(Qt::black));
-
-    insert("background", QColor(Qt::white));
-    insert("foreground", QColor(Qt::black));
 }

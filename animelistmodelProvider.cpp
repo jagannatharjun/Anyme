@@ -36,13 +36,14 @@ bool AnimeListModelProvider::gettingList() const { return m_gettingList; }
 int AnimeListModelProvider::categoryIndex() const { return m_categoryIndex; }
 
 void AnimeListModelProvider::setCategoryIndex(int categoryIndex) {
-    if (gettingList() || m_categoryIndex == categoryIndex)
+    if (gettingList() || (m_categoryIndex == categoryIndex && m_model->size() != 0))
         return;
 
     m_categoryIndex = categoryIndex;
     emit categoryIndexChanged(m_categoryIndex);
 
     m_model->clear();
+    m_pageNumber = 1;
     setGettingList(true);
     m_animeListProvider->requestAnimeList(m_pageNumber, m_categoryIndex);
 }

@@ -27,6 +27,7 @@ public:
 
     void clear();
     Anime getAnimeById(int id) const;
+    int size() const { return m_animes.size(); }
 
     AnimeListModel(QObject *parent = 0) : QAbstractListModel(parent) {}
     void addAnime(Anime anime);

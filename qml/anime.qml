@@ -57,7 +57,7 @@ Rectangle {
                 text: anime.title
                 font.family: myFont.name
                 font.pointSize: 18
-                color: Material.foreground
+                color: Material.secondaryTextColor
                 horizontalAlignment: Text.AlignHCenter
                 id: animeTitle
                 wrapMode: Text.WordWrap
@@ -93,8 +93,6 @@ Rectangle {
         font.weight: Font.Medium
         color: Material.accent
         id: ratingText
-
-
     }
 
     Rectangle {
@@ -151,100 +149,110 @@ Rectangle {
         clip: true
     }
 
-    Item {
+    Flickable {
         id: seriesView
 
-        Row {
-            id: stats
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 36
-            anchors.bottomMargin: 36
-            spacing: 40
-            Repeater {
-                property list<QtObject> paramModel: [
-                    QtObject {
-                        property string title: anime.score
-                        property string caption: 'Score'
-                    },
-                    QtObject {
-                        property string title: '#' + anime.rank
-                        property string caption: 'Rank'
-                    },
-                    QtObject {
-                        property string title: '#' + anime.popularity
-                        property string caption: 'Popularity'
-                    },
-                    QtObject {
-                        property string title: anime.members
-                        property string caption: 'Members'
-                    }
-                ]
-                model: paramModel
+        contentHeight: contentContainer.childrenRect.height + 100
+        boundsBehavior: Flickable.StopAtBounds
+        ScrollBar.vertical: ScrollBar {
+            visible: true
+        }
 
-                Column {
-                    width: titleText.width
-                    Text {
-                        text: modelData.title
-                        id: titleText
-                        font.family: bigShoulderRegular.name
-                        font.pixelSize: 38
-                        font.weight: Font.DemiBold
-                        color: Material.foreground
-                    }
+        Item {
+            id: contentContainer
+            anchors.fill: parent
 
-                    Text {
-                        text: modelData.caption
-                        anchors.horizontalCenter: titleText.horizontalCenter
-                        font.family: bigShoulderRegular.name
-                        font.pixelSize: 25
-                        color: Material.foreground
+            Row {
+                id: stats
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 36
+                anchors.bottomMargin: 36
+                spacing: 40
+                Repeater {
+                    property list<QtObject> paramModel: [
+                        QtObject {
+                            property string title: anime.score
+                            property string caption: 'Score'
+                        },
+                        QtObject {
+                            property string title: '#' + anime.rank
+                            property string caption: 'Rank'
+                        },
+                        QtObject {
+                            property string title: '#' + anime.popularity
+                            property string caption: 'Popularity'
+                        },
+                        QtObject {
+                            property string title: anime.members
+                            property string caption: 'Members'
+                        }
+                    ]
+                    model: paramModel
+
+                    Column {
+                        width: titleText.width
+                        Text {
+                            text: modelData.title
+                            id: titleText
+                            font.family: bigShoulderRegular.name
+                            font.pixelSize: 38
+                            font.weight: Font.DemiBold
+                            color: Material.foreground
+                        }
+
+                        Text {
+                            text: modelData.caption
+                            anchors.horizontalCenter: titleText.horizontalCenter
+                            font.family: bigShoulderRegular.name
+                            font.pixelSize: 25
+                            color: Material.foreground
+                        }
                     }
                 }
             }
-        }
 
-        Text {
-            function chose(list, suffix, prefix) {
-                if (!suffix)
-                    suffix = ''
-                if (!prefix)
-                    prefix = ' | '
-                for (var index = 0; index < list.length; index++) {
-                    if (list[index])
-                        return prefix + list[index] + suffix
+            Column {
+                anchors.top: stats.bottom
+                anchors.topMargin: 36
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 2
+
+                Text {
+                    function chose(list, suffix, prefix) {
+                        if (!suffix)
+                            suffix = ''
+                        if (!prefix)
+                            prefix = ' | '
+                        for (var index = 0; index < list.length; index++) {
+                            if (list[index])
+                                return prefix + list[index] + suffix
+                        }
+                        return ''
+                    }
+                    text: anime.status + chose(
+                              [anime.broadcast, anime.premiered, anime.duration]) + chose(
+                              [anime.episodes], ' Episodes')
+                    font.family: oswald.name
+                    font.pixelSize: 18
+                    font.weight: Font.DemiBold
+                    color: Material.foreground
+                    id: infoText
                 }
-                return ''
+
+                Text {
+                    width: parent.width - 20
+                    text: anime.synopsis + (anime.background ? '\n\n' + anime.background : '')
+                    font.family: oswaldLight.name
+                    font.weight: Font.Light
+                    font.pixelSize: 16
+                    font.letterSpacing: 0
+                    clip: true
+                    wrapMode: Text.WordWrap
+                    color: Material.foreground
+                }
             }
-            anchors.top: stats.bottom
-            anchors.topMargin: 36
-            anchors.left: parent.left
-            text: anime.status + chose(
-                      [anime.broadcast, anime.premiered, anime.duration]) + chose(
-                      [anime.episodes], ' Episodes')
-            font.family: oswald.name
-            font.pixelSize: 18
-            font.weight: Font.DemiBold
-            color: Material.foreground
-            id: infoText
-        }
-
-        Text {
-            anchors.top: infoText.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.topMargin: 6
-            anchors.bottomMargin: 100
-            anchors.rightMargin: 20
-
-            text: anime.synopsis
-            font.family: oswaldLight.name
-            font.weight: Font.Light
-            font.pixelSize: 16
-            font.letterSpacing: 0
-            clip: true
-            wrapMode: Text.WordWrap
-            color: Material.foreground
         }
     }
 

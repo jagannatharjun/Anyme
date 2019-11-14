@@ -61,6 +61,7 @@ void AnimeDetailsProvider::parseJsonDetails(AnimeDetailsRequest *rq, const QByte
     rq->setAnimeDetailsProp("premiered", obj["premiered"].toString());
     rq->setAnimeDetailsProp("duration", obj["duration"].toString());
     rq->setAnimeDetailsProp("synopsis", obj["synopsis"].toString());
+    rq->setAnimeDetailsProp("background", obj["background"].toString());
     rq->setAnimeDetailsProp("rating", obj["rating"].toString());
 
     qDebug(__PRETTY_FUNCTION__);

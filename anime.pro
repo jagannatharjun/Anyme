@@ -40,7 +40,3 @@ HEADERS += \
     animelistmodelprovider.hpp \
     animelistprovider.hpp \
     application.hpp
-
-DISTFILES += \
-    font/Oswald-Light.ttf \
-    font/Oswald-Light.ttf

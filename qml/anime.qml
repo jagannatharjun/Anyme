@@ -1,14 +1,11 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.13
 import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.13
 import QtQuick.Layouts 1.13
 
 Rectangle {
     anchors.fill: parent
     color: Material.background
-
-    Material.theme: Material.Dark
 
     MyFonts {
         id: fonts

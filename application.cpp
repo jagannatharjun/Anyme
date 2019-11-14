@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QQmlContext>
+#include <QQuickStyle>
 
 #define LIVE_QML
 
@@ -18,9 +19,8 @@ static QFileSystemWatcher *qmlWatcher;
 Application::Application(int &argc, char **argv)
     : QGuiApplication(argc, argv), m_animeList(new AnimeListModelProvider(this)),
       m_animeDetailsProvider(new AnimeDetailsProvider(this)) {
-
+    QQuickStyle::setStyle("Material");
     setContext(m_engine.rootContext());
-
     load(MYQMLPATH("mainWindow.qml"));
 }
 
@@ -63,4 +63,27 @@ QQmlContext *Application::load(const QString &path,
 void Application::setContext(QQmlContext *ctx) {
     ctx->setContextProperty("application", this);
     ctx->setContextProperty("animelist", m_animeList);
+    ctx->setContextProperty("theme", &m_theme);
+}
+
+Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
+//    insert("primary", QColor("#6200EE"));
+//    insert("primaryDark", QColor("#3700B3"));
+//    insert("primaryForeground", QColor(Qt::white));
+//    insert("primarySurface", QColor(Qt::white));
+//    insert("primarySurfaceForegound", QColor(Qt::black));
+
+//    insert("background", QColor("#303030"));
+//    insert("foreground", QColor(Qt::black));
+
+    insert("accent", QColor());
+
+    insert("primary", QColor(Qt::white));
+    insert("primaryDark", QColor(Qt::white));
+    insert("primaryForeground", QColor(Qt::black));
+    insert("primarySurface", QColor(Qt::black));
+    insert("primarySurfaceForegound", QColor(Qt::black));
+
+    insert("background", QColor(Qt::white));
+    insert("foreground", QColor(Qt::black));
 }

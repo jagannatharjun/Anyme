@@ -5,10 +5,15 @@
 
 #include <QQmlPropertyMap>
 
+#include<QDebug>
+
 class AnimeDetails : public QQmlPropertyMap {
     Q_OBJECT
 public:
     AnimeDetails(QObject *parent = nullptr) : QQmlPropertyMap(parent) {}
+    ~AnimeDetails() {
+        qDebug(__PRETTY_FUNCTION__);
+    }
 };
 
 class AnimeDetailsRequest : public QObject {

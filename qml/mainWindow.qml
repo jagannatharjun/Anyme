@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Window 2.13
-import QtQuick.Controls.Material 2.13
 import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.12
 
@@ -16,25 +15,23 @@ Rectangle {
     }
 
     property alias myFont: fonts.bigShoulder
-
-    Material.theme: Material.Dark
-    color: Material.background
+    color: theme.background
 
     Rectangle {
-        color: Material.toolBarColor
+        color: theme.primaryDark
         id: topBar
         anchors.top: parent.top
 
         anchors.right: parent.right
         anchors.left: parent.left
-        height: Material.dialogButtonBoxHeight
+        height: 56
 
         Rectangle {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: leftBar.width
-            color: Qt.darker(parent.color)
+            color: theme.primary
 
             Text {
                 font.family: myFont.name
@@ -42,7 +39,7 @@ Rectangle {
                 x: menuIcon.x + menuIcon.width + 4
                 y: menuIcon.y
                 text: 'MENU'
-                color: Material.foreground
+                color: theme.primaryForeground
                 visible: leftBar.state == 'VISIBLE'
             }
         }
@@ -61,7 +58,7 @@ Rectangle {
             ColorOverlay {
                 source: menuIcon
                 anchors.fill: parent
-                color: menuIconMouseArea.containsMouse ? Material.accent : Material.foreground
+                color: theme.primarySurface
             }
 
             MouseArea {
@@ -79,7 +76,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             font.family: myFont.name
             font.pointSize: 20
-            color: Material.foreground
+            color: theme.primaryForeground
         }
     }
 
@@ -108,7 +105,7 @@ Rectangle {
 
     Rectangle {
         id: leftBar
-        color: Qt.lighter(Material.backgroundColor)
+        color: theme.primaryDark
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.bottom: parent.bottom

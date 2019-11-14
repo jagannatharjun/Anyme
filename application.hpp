@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQmlPropertyMap>
 
 class AnimeListModelProvider;
 class AnimeDetailsProvider;
@@ -16,7 +17,13 @@ public:
     Q_INVOKABLE void loadAnimeInfo(int malId);
 
 private:
+    class Theme : public QQmlPropertyMap {
+    public:
+        Theme(QObject *parent = nullptr);
+    };
+
     QQmlApplicationEngine m_engine;
+    Theme m_theme;
     AnimeListModelProvider *m_animeList;
     AnimeDetailsProvider *m_animeDetailsProvider;
 

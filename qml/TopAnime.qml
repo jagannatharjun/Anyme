@@ -6,8 +6,11 @@ import QtQuick.Controls.Material 2.13
 Rectangle {
     visible: true
 
-    Material.theme: Material.Dark
     color: Material.background
+
+    Component.onCompleted:  {
+        print(Material.background)
+    }
 
     Text {
         text: 'Top Anime'
@@ -109,6 +112,7 @@ Rectangle {
                     source: imageUrl
                     id: img
                     fillMode: Image.PreserveAspectCrop
+
                 }
 
                 Rectangle {

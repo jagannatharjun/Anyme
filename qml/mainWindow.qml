@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.13
 import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.12
@@ -18,31 +18,12 @@ Rectangle {
     color: theme.background
 
     Rectangle {
-        color: theme.primaryDark
+        color: theme.primary
         id: topBar
         anchors.top: parent.top
-
         anchors.right: parent.right
         anchors.left: parent.left
         height: 56
-
-        Rectangle {
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: leftBar.width
-            color: theme.primary
-
-            Text {
-                font.family: myFont.name
-                font.pointSize: 12
-                x: menuIcon.x + menuIcon.width + 4
-                y: menuIcon.y
-                text: 'MENU'
-                color: theme.primaryForeground
-                visible: leftBar.state == 'VISIBLE'
-            }
-        }
 
         Image {
             id: menuIcon
@@ -58,7 +39,7 @@ Rectangle {
             ColorOverlay {
                 source: menuIcon
                 anchors.fill: parent
-                color: theme.primarySurface
+                color: theme.primaryForeground
             }
 
             MouseArea {
@@ -66,6 +47,7 @@ Rectangle {
                 anchors.fill: parent
                 id: menuIconMouseArea
                 onClicked: leftBar.state = leftBar.state == 'COLLAPSED' ? 'VISIBLE' : 'COLLAPSED'
+                cursorShape: Qt.PointingHandCursor
             }
         }
 
@@ -92,26 +74,42 @@ Rectangle {
         transparentBorder: true
     }
 
-    TopAnime {
+    AnimeGrid {
         anchors.right: parent.right
-        anchors.rightMargin: 0
         anchors.left: parent.left
-        anchors.leftMargin: 0
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
         anchors.top: topBar.bottom
         anchors.topMargin: topBarShadow.verticalOffset + topBarShadow.radius
+        model: animelist.model
+    }
+
+    Component.onCompleted: animelist.categoryIndex = 0
+    Rectangle {
+        id: darkOverlay
+        anchors.right: parent.right
+        anchors.left: leftBar.right
+        width: parent.width - leftBar.width
+        height: parent.height
+        color: 'black'
+        opacity: .7
+        visible: leftBar.state == 'VISIBLE'
+    }
+
+    MouseArea {
+        id: captureMouseEvents
+        anchors.fill: parent
+        propagateComposedEvents: false
+        hoverEnabled: true
+        onClicked: leftBar.state = 'COLLAPSED'
+        visible: leftBar.state == 'VISIBLE'
     }
 
     Rectangle {
         id: leftBar
-        color: theme.primaryDark
+        color: theme.primary
         anchors.left: parent.left
-        anchors.leftMargin: 0
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.top: topBar.bottom
-        anchors.topMargin: 0
+        anchors.top: parent.top
 
         Component.onCompleted: state = 'COLLAPSED'
         states: [

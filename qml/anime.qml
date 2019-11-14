@@ -1,11 +1,9 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.13
 import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.13
 
 Rectangle {
     anchors.fill: parent
-    color: Material.background
 
     MyFonts {
         id: fonts
@@ -26,6 +24,7 @@ Rectangle {
         source: 'qrc:/font/Oswald-Light.ttf'
     }
 
+    color: theme.background
     property alias myFont: fonts.bigShoulder
 
     Rectangle {
@@ -33,7 +32,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         width: 280
-        color: Material.accent
+        color: theme.accent
         id: leftBar
 
         Column {
@@ -54,7 +53,7 @@ Rectangle {
                 text: anime.title
                 font.family: myFont.name
                 font.pointSize: 18
-                color: Material.secondaryTextColor
+                color: theme.accentForeground
                 horizontalAlignment: Text.AlignHCenter
                 id: animeTitle
                 wrapMode: Text.WordWrap
@@ -75,7 +74,7 @@ Rectangle {
         anchors.left: topLabels.left
         text: anime.japaneseTitle
         font.pointSize: 12
-        color: Material.foreground
+        color: theme.foreground
         id: japaneseTitle
     }
 
@@ -88,7 +87,7 @@ Rectangle {
         font.family: bigShoulderRegular.name
         font.pixelSize: 21
         font.weight: Font.Medium
-        color: Material.accent
+        color: theme.accent
         id: ratingText
     }
 
@@ -98,7 +97,7 @@ Rectangle {
         width: ratingText.width + (border.width * 2) + 4
         height: ratingText.height + (border.width * 2) + 2
         color: 'transparent'
-        border.color: Material.accent
+        border.color: theme.accent
         border.width: 2
     }
 
@@ -125,7 +124,7 @@ Rectangle {
                 font.weight: Font.Bold
 
                 color: topLabels.selectedIndex
-                       === index ? Material.foreground : Material.backgroundDimColor
+                       === index ? theme.foreground : theme.disabledText
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
@@ -195,7 +194,7 @@ Rectangle {
                             font.family: bigShoulderRegular.name
                             font.pixelSize: 38
                             font.weight: Font.DemiBold
-                            color: Material.foreground
+                            color: theme.foreground
                         }
 
                         Text {
@@ -203,7 +202,7 @@ Rectangle {
                             anchors.horizontalCenter: titleText.horizontalCenter
                             font.family: bigShoulderRegular.name
                             font.pixelSize: 25
-                            color: Material.foreground
+                            color: theme.foreground
                         }
                     }
                 }
@@ -234,7 +233,7 @@ Rectangle {
                     font.family: oswald.name
                     font.pixelSize: 18
                     font.weight: Font.DemiBold
-                    color: Material.foreground
+                    color: theme.foreground
                     id: infoText
                 }
 
@@ -247,7 +246,7 @@ Rectangle {
                     font.letterSpacing: 0
                     clip: true
                     wrapMode: Text.WordWrap
-                    color: Material.foreground
+                    color: theme.foreground
                 }
             }
         }

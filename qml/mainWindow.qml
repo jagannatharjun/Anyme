@@ -106,93 +106,184 @@ Rectangle {
     }
 
     Rectangle {
-        id: leftBar
+        width: leftBar.width
+        height: window.height
         color: theme.primary
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
+    }
+
+    Flickable {
+        id: leftBar
+        //    color: theme.primary
+        height: parent.height
+        contentHeight: leftBarContent.childrenRect.height + 100
+        boundsBehavior: Flickable.StopAtBounds
+        ScrollBar.vertical: ScrollBar {
+            visible: true
+            width: 8
+        }
+        onContentHeightChanged: print(contentHeight)
         clip: true
 
-        Image {
-            id: img
-            source: 'qrc:/icon/logo.png'
-            width: 81
-            height: 104
-            x: 11
-            y: 17
-        }
-
-        Text {
-            anchors.verticalCenter: img.verticalCenter
-            x: 117
-            font.family: fonts.bigShoulder.name
-            color: theme.primaryForeground
-            text: 'ANIME'
-            font.pixelSize: 30
-        }
-
-        Rectangle {
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.leftMargin: 12
-            anchors.rightMargin: 12
-            y: 134
-            height: 2
-            color: theme.background
-            id: logoSeperator
-        }
-
-        Text {
-            anchors.top: logoSeperator.bottom
-            anchors.left: logoSeperator.left
-            anchors.leftMargin: 4
-            font.family: fonts.bigShoulder.name
-            color: theme.primaryForeground
-            text: 'Top'
-            font.pixelSize: 26
-            id: topTxt
-        }
-
-        Image {
-            anchors.right: logoSeperator.right
-            anchors.verticalCenter: topTxt.verticalCenter
-            source: 'qrc:/icon/drop-down.png'
-            transformOrigin: Item.Center
-            rotation: catlist.visible ? 0 : 180
-            MouseArea {
-                anchors.fill: parent
-                onClicked: catlist.visible = !catlist.visible
+        Item {
+            id: leftBarContent
+            anchors.fill: parent
+            Image {
+                id: img
+                source: 'qrc:/icon/logo.png'
+                width: 81
+                height: 104
+                x: 11
+                y: 17
             }
-        }
 
-        ListView {
-            id: catlist
-            anchors.top: topTxt.bottom
-            height: contentHeight
-            interactive: false
-            model: animelist.categoryList()
+            Text {
+                anchors.verticalCenter: img.verticalCenter
+                x: 117
+                font.family: fonts.bigShoulder.name
+                color: theme.primaryForeground
+                text: 'ANIME'
+                font.pixelSize: 30
+            }
 
-            delegate: Rectangle {
-                width: leftBar.width
-                height: 34
-                color: mouseArea.containsMouse ? theme.primaryDark : 'transparent'
+            Rectangle {
+                anchors.right: parent.right
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.rightMargin: 12
+                y: 134
+                height: 2
+                color: theme.background
+                id: logoSeperator
+            }
+
+            Text {
+                anchors.top: logoSeperator.bottom
+                anchors.left: logoSeperator.left
+                anchors.leftMargin: 4
+                font.family: fonts.bigShoulder.name
+                color: theme.primaryForeground
+                text: 'Top'
+                font.pixelSize: 26
+                id: topTxt
+            }
+
+            Image {
+                anchors.right: logoSeperator.right
+                anchors.verticalCenter: topTxt.verticalCenter
+                source: 'qrc:/icon/drop-down.png'
+                transformOrigin: Item.Center
+                id: dropDown
+
+                property bool isCollapsed: state == 'COLLAPSED'
 
                 MouseArea {
                     anchors.fill: parent
-                    id: mouseArea
-                    onClicked: animelist.categoryIndex = index
-                    hoverEnabled: true
-
+                    onClicked: dropDown.state = dropDown.isCollapsed ? 'DROPPED' : 'COLLAPSED'
                 }
 
-                Text {
-                    x : topTxt.x + 12
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.family: fonts.bigShoulder.name
-                    color: theme.primaryForeground
-                    text: model.modelData
-                    font.pixelSize: 20
+                Component.onCompleted: state = 'COLLAPSED'
+
+                states: [
+                    State {
+                        name: "COLLAPSED"
+                        PropertyChanges {
+                            target: dropDown
+                            rotation: 180
+                        }
+                    },
+                    State {
+                        name: "DROPPED"
+                        PropertyChanges {
+                            target: dropDown
+                            rotation: 0
+                        }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: "COLLAPSED"
+                        to: "DROPPED"
+                        reversible: true
+                        NumberAnimation {
+                            properties: "rotation"
+                            duration: 100
+                        }
+                    }
+                ]
+            }
+
+            ListView {
+                id: catlist
+                anchors.top: topTxt.bottom
+                width: leftBar.width
+                interactive: false
+                model: animelist.categoryList()
+                clip: true
+
+                delegate: Rectangle {
+                    width: leftBar.width
+                    height: 34
+                    color: mouseArea.containsMouse ? theme.background : 'transparent'
+
+                    MouseArea {
+                        anchors.fill: parent
+                        id: mouseArea
+                        onClicked: animelist.categoryIndex = index
+                        hoverEnabled: true
+                    }
+
+                    Text {
+                        x: topTxt.x + 12
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: fonts.bigShoulder.name
+                        color: mouseArea.containsMouse ? theme.foreground : theme.primaryForeground
+                        text: model.modelData
+                        font.pixelSize: 20
+                        font.underline: animelist.categoryIndex == index
+                    }
                 }
+
+                state: dropDown.isCollapsed ? 'COLLAPSED' : 'DROPPED'
+
+                states: [
+                    State {
+                        name: "COLLAPSED"
+                        PropertyChanges {
+                            target: catlist
+                            height: 0
+                        }
+                    },
+                    State {
+                        name: "DROPPED"
+                        PropertyChanges {
+                            target: catlist
+                            height: 34 * catlist.count
+                        }
+                    }
+                ]
+
+                transitions: [
+                    Transition {
+                        from: "COLLAPSED"
+                        to: "DROPPED"
+                        reversible: true
+                        NumberAnimation {
+                            properties: "height"
+                            duration: 200
+                        }
+                    }
+                ]
+            }
+
+            Text {
+                anchors.top: catlist.bottom
+                anchors.left: logoSeperator.left
+                anchors.leftMargin: 4
+                font.family: fonts.bigShoulder.name
+                color: theme.primaryForeground
+                text: 'Search'
+                font.pixelSize: 26
             }
         }
 
@@ -218,14 +309,7 @@ Rectangle {
             Transition {
                 from: "COLLAPSED"
                 to: "VISIBLE"
-                NumberAnimation {
-                    properties: "width"
-                    duration: 100
-                }
-            },
-            Transition {
-                from: "VISIBLE"
-                to: "COLLAPSED"
+                reversible: true
                 NumberAnimation {
                     properties: "width"
                     duration: 100

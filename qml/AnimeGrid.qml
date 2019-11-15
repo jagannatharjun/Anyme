@@ -5,43 +5,6 @@ import QtQuick.Controls 2.13
 GridView {
     visible: true
 
-    //    Text {
-    //        text: 'Top Anime'
-    //        font.family: myFont.name
-    //        font.pointSize: 24
-    //        color: Material.foreground
-    //        leftPadding: 6
-    //        id: topText
-    //    }
-
-    //    Row {
-    //        id: categoryList
-    //        y: topText.y + topText.height + 2
-    //        Repeater {
-    //            model: animelist.categoryList()
-    //            Text {
-    //                leftPadding: 6
-    //                font.family: myFont.name
-    //                font.pointSize: 16
-    //                font.underline: animelist.categoryIndex == index
-    //                color: animelist.gettingList ? Qt.darker(
-    //                                                   Material.foreground) : Material.foreground
-    //                text: model.modelData
-    //                rightPadding: 12
-    //                bottomPadding: 12
-
-    //                MouseArea {
-    //                    anchors.fill: parent
-    //                    cursorShape: Qt.PointingHandCursor
-    //                    onClicked: {
-    //                        animelist.categoryIndex = index
-    //                    }
-    //                    enabled: !animelist.gettingList
-    //                }
-    //            }
-    //        }
-    //    }
-
     onWidthChanged: {
         let normalHeight = 240
         let normalWidth = 136
@@ -66,13 +29,6 @@ GridView {
         visible: true
     }
 
-//    onAtYEndChanged: {
-//        if (atYEnd) {
-//            print("at end")
-//            animelist.nextPage()
-//        }
-//    }
-
     id: animeGrid
     boundsBehavior: Flickable.StopAtBounds
 
@@ -80,8 +36,6 @@ GridView {
         readonly property int ribbionHeight: 56
         width: animeGrid.cellWidth
         height: animeGrid.cellHeight
-        //            border.width: 4
-        //            border.color: mouseArea.containsMouse ? Material.highlightedButtonColor : 'transparent'
         color: mouseArea.containsMouse ? theme.accent : 'transparent'
 
         Item {

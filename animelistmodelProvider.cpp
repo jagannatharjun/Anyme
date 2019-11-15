@@ -6,21 +6,8 @@
 
 #include <QDebug>
 
-AnimeListModelProvider::AnimeListModelProvider(QObject *parent)
-    : AnimeRequest(parent), m_animeListProvider(new AnimeListProvider(this)) {
+AnimeListModelProvider::AnimeListModelProvider(QObject *parent) : AnimeListProvider(parent) {
     m_model = new AnimeListModel(this);
-
-    connect(m_animeListProvider, &AnimeListProvider::gotAnime,
-            [this](Anime a) { m_model->addAnime(std::move(a)); });
-    connect(m_animeListProvider, &AnimeListProvider::animeListRequestDone,
-            [this](bool failure, const QString &err) {
-                if (failure) {
-                    setStatus(RequestStatus::Error, err);
-                }
-                setStatus(RequestStatus::Completed);
-            });
-
-    setCategoryIndex(0);
 }
 
 QStringList AnimeListModelProvider::categoryList() {
@@ -34,32 +21,35 @@ AnimeListModel *AnimeListModelProvider::model() const { return m_model; }
 int AnimeListModelProvider::categoryIndex() const { return m_categoryIndex; }
 
 void AnimeListModelProvider::setCategoryIndex(int categoryIndex) {
-    if (isLoading() || (m_categoryIndex == categoryIndex && m_model->size() != 0))
-        return;
+    cancelCurrentRequest();
+    Q_ASSERT(!isLoading());
 
     m_categoryIndex = categoryIndex;
-    emit categoryIndexChanged(m_categoryIndex);
 
     m_model->clear();
     m_pageNumber = 1;
 
-    setStatus(RequestStatus::InProgress);
-    m_animeListProvider->requestAnimeList(m_pageNumber, m_categoryIndex);
+    requestAnimeList(m_pageNumber, m_categoryIndex);
+
+    emit categoryIndexChanged(m_categoryIndex);
 }
 
 const QString &AnimeListModelProvider::category() const { return categoryList()[m_categoryIndex]; }
 
 void AnimeListModelProvider::nextPage() {
-    setStatus(RequestStatus::InProgress);
-    m_animeListProvider->requestAnimeList(++m_pageNumber, m_categoryIndex);
+    if (isLoading())
+        return;
+
+    requestAnimeList(++m_pageNumber, m_categoryIndex);
 }
+
+void AnimeListModelProvider::addAnime(Anime a) { m_model->addAnime(a); }
 
 void AnimeListModel::clear() {
     beginResetModel();
     m_animes.clear();
     endResetModel();
 }
-
 
 void AnimeListModel::addAnime(Anime anime) {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());

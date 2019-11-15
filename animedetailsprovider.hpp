@@ -27,6 +27,10 @@ public:
 private:
     AnimeDetails *m_details;
     void setAnimeDetailsProp(const char *prop, const QVariant &v) { m_details->insert(prop, v); }
+
+private:
+    void parseNetworkReply(class QNetworkReply *) override;
+
 };
 
 class AnimeDetailsProvider : public QObject {
@@ -38,8 +42,6 @@ public:
 private:
     class QNetworkAccessManager *m_networkManager;
 
-private:
-    static void parseJsonDetails(AnimeDetailsRequest *rq, const QByteArray &data);
 };
 
 #endif // ANIMEDETAILSPROVIDER_HPP

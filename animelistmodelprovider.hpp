@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "anime.hpp"
+#include "animelistprovider.hpp"
 #include "animerequest.hpp"
 
 class AnimeListProvider;
@@ -41,7 +42,7 @@ private:
     QVector<Anime> m_animes;
 };
 
-class AnimeListModelProvider : public AnimeRequest {
+class AnimeListModelProvider : public AnimeListProvider {
     Q_OBJECT
     Q_PROPERTY(AnimeListModel *model READ model)
     Q_PROPERTY(
@@ -64,9 +65,10 @@ signals:
 
 private:
     AnimeListModel *m_model;
-    AnimeListProvider *m_animeListProvider;
     int m_categoryIndex = 0;
     int m_pageNumber = 1;
+
+    void addAnime(Anime a) override;
 };
 
 #endif // ANIMELIST_HPP

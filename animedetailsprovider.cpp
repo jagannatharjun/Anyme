@@ -18,12 +18,11 @@ AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
         QUrl(QString(R"(https://api.jikan.moe/v3/anime/%1)").arg(QString::number(malId)))));
 
     connect(rep, &QNetworkReply::finished, [req, rep]() {
-        if (rep->error() != QNetworkReply::NoError)
-            return;
-        parseJsonDetails(req, rep->readAll());
+        req->parseNetworkReply(rep);
+        rep->deleteLater();
     });
     connect(rep, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-            [req, rep](QNetworkReply::NetworkError ) {
+            [req, rep](QNetworkReply::NetworkError) {
                 req->setStatus(AnimeRequest::RequestStatus::Error,
                                tr("Network Error - %1").arg(rep->errorString()));
             });
@@ -31,9 +30,12 @@ AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
     return req;
 }
 
-void AnimeDetailsProvider::parseJsonDetails(AnimeDetailsRequest *rq, const QByteArray &data) try {
+void AnimeDetailsRequest::parseNetworkReply(QNetworkReply *r) try {
+    if (r->error() != QNetworkReply::NoError)
+        throw tr("Network Reply - %1").arg(r->errorString());
+
     QJsonParseError err;
-    QJsonDocument doc(QJsonDocument::fromJson(data, &err));
+    QJsonDocument doc(QJsonDocument::fromJson(r->readAll(), &err));
     if (err.error != QJsonParseError::NoError) {
         throw tr("Json Error %1").arg(err.errorString());
     } else if (!doc.isObject()) {
@@ -41,31 +43,31 @@ void AnimeDetailsProvider::parseJsonDetails(AnimeDetailsRequest *rq, const QByte
     }
 
     QJsonObject obj(doc.object());
-    rq->setAnimeDetailsProp("malId", obj["mal_id"].toString());
-    rq->setAnimeDetailsProp("title", obj["title"].toString());
-    rq->setAnimeDetailsProp("englistTitle", obj["title_english"].toString());
-    rq->setAnimeDetailsProp("japaneseTitle", obj["title_japanese"].toString());
-    rq->setAnimeDetailsProp("source", obj["source"].toString());
-    rq->setAnimeDetailsProp("episodes", obj["episodes"].toInt());
-    rq->setAnimeDetailsProp("status", obj["status"].toString());
-    rq->setAnimeDetailsProp("duration", obj["duration"].toString());
-    rq->setAnimeDetailsProp("imageUrl", obj["image_url"].toString());
-    rq->setAnimeDetailsProp("score", obj["score"].toDouble());
-    rq->setAnimeDetailsProp("scoredBy", obj["scored_by"].toInt());
-    rq->setAnimeDetailsProp("rank", obj["rank"].toInt());
-    rq->setAnimeDetailsProp("popularity", obj["popularity"].toInt());
-    rq->setAnimeDetailsProp("members", obj["members"].toInt());
-    rq->setAnimeDetailsProp("broadcast", obj["broadcast"].toString());
-    rq->setAnimeDetailsProp("premiered", obj["premiered"].toString());
-    rq->setAnimeDetailsProp("duration", obj["duration"].toString());
-    rq->setAnimeDetailsProp("synopsis", obj["synopsis"].toString());
-    rq->setAnimeDetailsProp("background", obj["background"].toString());
-    rq->setAnimeDetailsProp("rating", obj["rating"].toString());
+    setAnimeDetailsProp("malId", obj["mal_id"].toString());
+    setAnimeDetailsProp("title", obj["title"].toString());
+    setAnimeDetailsProp("englistTitle", obj["title_english"].toString());
+    setAnimeDetailsProp("japaneseTitle", obj["title_japanese"].toString());
+    setAnimeDetailsProp("source", obj["source"].toString());
+    setAnimeDetailsProp("episodes", obj["episodes"].toInt());
+    setAnimeDetailsProp("status", obj["status"].toString());
+    setAnimeDetailsProp("duration", obj["duration"].toString());
+    setAnimeDetailsProp("imageUrl", obj["image_url"].toString());
+    setAnimeDetailsProp("score", obj["score"].toDouble());
+    setAnimeDetailsProp("scoredBy", obj["scored_by"].toInt());
+    setAnimeDetailsProp("rank", obj["rank"].toInt());
+    setAnimeDetailsProp("popularity", obj["popularity"].toInt());
+    setAnimeDetailsProp("members", obj["members"].toInt());
+    setAnimeDetailsProp("broadcast", obj["broadcast"].toString());
+    setAnimeDetailsProp("premiered", obj["premiered"].toString());
+    setAnimeDetailsProp("duration", obj["duration"].toString());
+    setAnimeDetailsProp("synopsis", obj["synopsis"].toString());
+    setAnimeDetailsProp("background", obj["background"].toString());
+    setAnimeDetailsProp("rating", obj["rating"].toString());
 
-    rq->setStatus(AnimeRequest::RequestStatus::Completed);
+    setStatus(AnimeRequest::RequestStatus::Completed);
 
 } catch (const QString &err) {
-    rq->setStatus(AnimeRequest::RequestStatus::Error, err);
+    setStatus(AnimeRequest::RequestStatus::Error, err);
 }
 
 AnimeDetails *AnimeDetailsRequest::details() const { return m_details; }

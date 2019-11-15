@@ -4,28 +4,29 @@
 #include <QObject>
 
 #include "anime.hpp"
+#include "animerequest.hpp"
 
 class QNetworkAccessManager;
 class QNetworkReply;
 
-class AnimeListProvider : public QObject {
+class AnimeListProvider : public AnimeRequest {
     Q_OBJECT
 public:
     explicit AnimeListProvider(QObject *parent = nullptr);
     Q_INVOKABLE static const QStringList &categoryList();
 
-signals:
-    void gotAnime(Anime anime);
-    void animeListRequestDone(bool failure, const QString& err);
-
-public slots:
-    void requestAnimeList(int page, int categoryIndex);
-
 private slots:
-    void parseAnimeList(QNetworkReply *r);
+    void parseNetworkReply(QNetworkReply *r) override;
+
+protected:
+    virtual void addAnime(Anime anime) = 0;
+
+    void requestAnimeList(int page, int categoryIndex);
+    void cancelCurrentRequest();
 
 private:
-    QNetworkAccessManager *m_networkManager;
+    QNetworkAccessManager *m_networkManager = nullptr;
+    QNetworkReply *m_currentRequest = nullptr;
 };
 
 #endif // MYANIMELIST_HPP

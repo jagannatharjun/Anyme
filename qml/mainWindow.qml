@@ -84,8 +84,10 @@ Rectangle {
         id: animeGrid
 
         onAtYEndChanged: {
-            if (atYEnd && !animelist.isLoading)
+            // on indexChange count becomes 0 and this method is called be setCategoryIndex
+            if (atYEnd && count != 0) {
                 animelist.nextPage()
+            }
         }
 
         footer: Item {

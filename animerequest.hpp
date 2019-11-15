@@ -24,19 +24,28 @@ public:
 signals:
     void statusChanged();
     void errorStringChanged(QString errorString);
+    void completed();
+    void errored();
 
 private:
     RequestStatus m_status = RequestStatus::Completed;
     QString m_errorString;
 
+protected slots:
+    virtual void parseNetworkReply(class QNetworkReply *) = 0;
+
 protected:
+
     void setStatus(RequestStatus status, const QString &err = {}) {
         if (m_status == status)
             return;
         m_status = status;
 
-        if (status == RequestStatus::Error) {
+        if (status == RequestStatus::Completed) {
+            emit completed();
+        } else if (status == RequestStatus::Error) {
             m_errorString = err;
+            emit errored();
         } else {
             Q_ASSERT(err.isEmpty());
             m_errorString = QString{};

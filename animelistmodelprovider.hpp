@@ -49,7 +49,8 @@ class AnimeListModelProvider : public QObject {
     Q_PROPERTY(
         int categoryIndex READ categoryIndex WRITE setCategoryIndex NOTIFY categoryIndexChanged)
     Q_PROPERTY(bool gettingList READ gettingList WRITE setGettingList NOTIFY gettingListChanged)
-
+    Q_PROPERTY(bool isError READ isError NOTIFY errorChanged)
+    Q_PROPERTY(QString errorString READ errorString NOTIFY errorChanged)
 public:
     explicit AnimeListModelProvider(QObject *parent = nullptr);
 
@@ -63,9 +64,14 @@ public:
     AnimeListModel *model() const;
     bool gettingList() const;
 
+    bool isError() const;
+
+    QString errorString() const;
+
 signals:
     void categoryIndexChanged(int categoryIndex);
     void gettingListChanged(bool gettingList);
+    void errorChanged(bool isError);
 
 private:
     AnimeListModel *m_model;
@@ -75,6 +81,9 @@ private:
     int m_pageNumber = 1;
 
     void setGettingList(bool gettingList);
+    void setIsError(bool isError, const QString& err);
+    bool m_isError;
+    QString m_errorString;
 };
 
 #endif // ANIMELIST_HPP

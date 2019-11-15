@@ -81,6 +81,36 @@ Rectangle {
         anchors.top: topBar.bottom
         anchors.topMargin: topBarShadow.verticalOffset + topBarShadow.radius
         model: animelist.model
+        id: animeGrid
+
+        onAtYEndChanged: {
+            if (atYEnd && !animelist.gettingList)
+                animelist.nextPage()
+        }
+
+        footer: Item {
+            id: animeGridNotif
+            visible: animelist.isError || animelist.gettingList
+            height: 100
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            BusyIndicator {
+                anchors.centerIn: parent
+                running: animelist.gettingList
+            }
+
+            Text {
+                anchors.centerIn: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                visible: animelist.isError && !animelist.gettingList
+                text: animelist.errorString
+                font.family: myFont.name
+                font.pixelSize: 24
+                color: theme.disabledText
+            }
+        }
     }
 
     Component.onCompleted: animelist.categoryIndex = 0
@@ -115,7 +145,7 @@ Rectangle {
         id: leftBar
         //    color: theme.primary
         height: parent.height
-        contentHeight: leftBarContent.childrenRect.height + 100
+        contentHeight: leftBarContent.childrenRect.height
         boundsBehavior: Flickable.StopAtBounds
         ScrollBar.vertical: ScrollBar {
             visible: true
@@ -158,12 +188,17 @@ Rectangle {
             Text {
                 anchors.top: logoSeperator.bottom
                 anchors.left: logoSeperator.left
+                anchors.topMargin: 4
                 anchors.leftMargin: 4
-                font.family: fonts.bigShoulderRegular.name
+                font.family: fonts.bigShoulder.name
                 color: theme.primaryForeground
                 text: 'Top'
                 font.pixelSize: 26
                 id: topTxt
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: dropDown.toogleState()
+                }
             }
 
             Image {
@@ -173,11 +208,15 @@ Rectangle {
                 transformOrigin: Item.Center
                 id: dropDown
 
+                function toogleState() {
+                    state = isCollapsed ? 'DROPPED' : 'COLLAPSED'
+                }
+
                 property bool isCollapsed: state == 'COLLAPSED'
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: dropDown.state = dropDown.isCollapsed ? 'DROPPED' : 'COLLAPSED'
+                    onClicked: dropDown.toogleState()
                 }
 
                 Component.onCompleted: state = 'COLLAPSED'
@@ -223,8 +262,8 @@ Rectangle {
                 delegate: Rectangle {
                     width: leftBar.width
                     height: 34
-                    color: mouseArea.containsMouse ? theme.background : 'transparent'
-
+                    color: mouseArea.containsMouse
+                           || animelist.categoryIndex == index ? theme.background : 'transparent'
                     MouseArea {
                         anchors.fill: parent
                         id: mouseArea
@@ -235,9 +274,12 @@ Rectangle {
                     Text {
                         x: topTxt.x + 12
                         anchors.verticalCenter: parent.verticalCenter
-                        font.family: fonts.bigShoulderRegular.name
-                        color: mouseArea.containsMouse ? theme.foreground : theme.primaryForeground
-                        text: model.modelData.charAt(0).toUpperCase() + model.modelData.slice(1)
+                        font.family: fonts.bigShoulder.name
+                        color: mouseArea.containsMouse
+                               || animelist.categoryIndex
+                               == index ? theme.foreground : theme.primaryForeground
+                        text: model.modelData.charAt(0).toUpperCase(
+                                  ) + model.modelData.slice(1)
                         font.pixelSize: 20
                         font.underline: animelist.categoryIndex == index
                     }
@@ -245,6 +287,7 @@ Rectangle {
 
                 state: dropDown.isCollapsed ? 'COLLAPSED' : 'DROPPED'
 
+                height: 34 * catlist.count
                 states: [
                     State {
                         name: "COLLAPSED"
@@ -269,7 +312,7 @@ Rectangle {
                         reversible: true
                         NumberAnimation {
                             properties: "height"
-                            duration: 200
+                            duration: 256
                         }
                     }
                 ]
@@ -280,19 +323,18 @@ Rectangle {
                 anchors.leftMargin: 12
                 anchors.rightMargin: 12
                 anchors.top: catlist.bottom
-                anchors.topMargin: 4
+                anchors.topMargin: 16
                 height: 1
                 color: theme.disabledText
                 id: topSeparator
             }
 
-
             Text {
-                anchors.top: catlist.bottom
+                anchors.top: topSeparator.bottom
                 anchors.topMargin: 4
                 anchors.left: logoSeperator.left
                 anchors.leftMargin: 4
-                font.family: fonts.bigShoulderRegular.name
+                font.family: fonts.bigShoulder.name
                 color: theme.primaryForeground
                 text: 'Search'
                 font.pixelSize: 26

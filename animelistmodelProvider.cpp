@@ -15,7 +15,7 @@ AnimeListModelProvider::AnimeListModelProvider(QObject *parent)
     connect(m_animeListProvider, &AnimeListProvider::animeListRequestDone,
             [this](bool failure, const QString &err) {
                 if (failure) {
-                    qDebug() << "Encountered error - " << err;
+                    setIsError(true, err);
                 }
                 setGettingList(false);
             });
@@ -132,4 +132,17 @@ void AnimeListModelProvider::setGettingList(bool gettingList) {
 
     m_gettingList = gettingList;
     emit gettingListChanged(m_gettingList);
+}
+
+bool AnimeListModelProvider::isError() const { return m_isError; }
+
+QString AnimeListModelProvider::errorString() const { return m_errorString; }
+
+void AnimeListModelProvider::setIsError(bool isError, const QString &err) {
+    if (m_isError == isError && err != m_errorString)
+        return;
+
+    m_errorString = err;
+    m_isError = isError;
+    emit errorChanged(m_isError);
 }

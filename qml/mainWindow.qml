@@ -121,7 +121,6 @@ Rectangle {
             visible: true
             width: 8
         }
-        onContentHeightChanged: print(contentHeight)
         clip: true
 
         Item {
@@ -151,8 +150,8 @@ Rectangle {
                 anchors.leftMargin: 12
                 anchors.rightMargin: 12
                 y: 134
-                height: 2
-                color: theme.background
+                height: 1
+                color: theme.disabledText
                 id: logoSeperator
             }
 
@@ -160,7 +159,7 @@ Rectangle {
                 anchors.top: logoSeperator.bottom
                 anchors.left: logoSeperator.left
                 anchors.leftMargin: 4
-                font.family: fonts.bigShoulder.name
+                font.family: fonts.bigShoulderRegular.name
                 color: theme.primaryForeground
                 text: 'Top'
                 font.pixelSize: 26
@@ -236,9 +235,9 @@ Rectangle {
                     Text {
                         x: topTxt.x + 12
                         anchors.verticalCenter: parent.verticalCenter
-                        font.family: fonts.bigShoulder.name
+                        font.family: fonts.bigShoulderRegular.name
                         color: mouseArea.containsMouse ? theme.foreground : theme.primaryForeground
-                        text: model.modelData
+                        text: model.modelData.charAt(0).toUpperCase() + model.modelData.slice(1)
                         font.pixelSize: 20
                         font.underline: animelist.categoryIndex == index
                     }
@@ -275,12 +274,25 @@ Rectangle {
                     }
                 ]
             }
+            Rectangle {
+                anchors.right: parent.right
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.rightMargin: 12
+                anchors.top: catlist.bottom
+                anchors.topMargin: 4
+                height: 1
+                color: theme.disabledText
+                id: topSeparator
+            }
+
 
             Text {
                 anchors.top: catlist.bottom
+                anchors.topMargin: 4
                 anchors.left: logoSeperator.left
                 anchors.leftMargin: 4
-                font.family: fonts.bigShoulder.name
+                font.family: fonts.bigShoulderRegular.name
                 color: theme.primaryForeground
                 text: 'Search'
                 font.pixelSize: 26

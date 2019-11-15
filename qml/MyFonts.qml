@@ -7,6 +7,11 @@ Item {
     }
 
     FontLoader {
+        id: bigShoulderRegular
+        source: 'qrc:/font/BigShouldersDisplay-Regular.ttf'
+    }
+
+    FontLoader {
         id: bigShoulder
         source: 'qrc:/font/BigShouldersText-Medium.ttf'
     }
@@ -21,6 +26,7 @@ Item {
         source: "qrc:/font/MontserratAlternates-SemiBold.otf"
     }
     readonly property alias bigShoulder: bigShoulder
+    readonly property alias bigShoulderRegular: bigShoulderRegular
     readonly property alias sansSerif: sansSerif
     readonly property alias sansSerifBold: sansSerifBold
     readonly property alias varelaFont: varelaFont

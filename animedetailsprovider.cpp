@@ -1,16 +1,66 @@
 #include "animedetailsprovider.hpp"
 
+#include <QEventLoop>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QQuickImageProvider>
+
+#include <QHash>
+#include <QPixmap>
+#include <memory>
+
+#include <QThread>
+
+const QString qmlImageProvider = "animeDetailsImageProvider";
+
+class AnimeDetailsImageProvider : public QQuickImageProvider {
+public:
+    AnimeDetailsImageProvider(QNetworkAccessManager *i)
+        : QQuickImageProvider(QQuickImageProvider::Pixmap), m_networkManager(i) {}
+
+    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override {
+        const auto &p = m_imageCache.value(id);
+        if (size)
+            *size = QSize(p.width(), p.height());
+        return p.scaled(requestedSize.width() > 0 ? requestedSize.width() : p.width(),
+                        requestedSize.height() > 0 ? requestedSize.height() : p.height());
+    }
+
+    QUrl cacheUrl(const QUrl &u, const QString &malId) {
+        m_imageCache[malId] = download_from(u);
+        return QUrl(
+            QString("image://%1/%2").arg(qmlImageProvider, malId));
+    }
+
+private:
+    QHash<QString, QPixmap> m_imageCache;
+    QNetworkAccessManager *m_networkManager;
+
+    QPixmap download_from(const QUrl &url) {
+        QEventLoop loop;
+        QNetworkReply *reply = m_networkManager->get(QNetworkRequest(url));
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+
+        QPixmap pm;
+        pm.loadFromData(reply->readAll());
+
+        delete reply;
+        return pm;
+    }
+};
 
 AnimeDetailsProvider::AnimeDetailsProvider(QNetworkAccessManager *i, QObject *parent)
-    : QObject(parent), m_networkManager(i) {}
+    : QObject(parent), m_networkManager(i),
+      m_imageProvider(new AnimeDetailsImageProvider(m_networkManager)) {}
+
+AnimeDetailsProvider::~AnimeDetailsProvider() { delete m_imageProvider; }
 
 AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
-    AnimeDetailsRequest *req(new AnimeDetailsRequest(this));
+    AnimeDetailsRequest *req(new AnimeDetailsRequest(m_imageProvider, this));
 
     req->setStatus(AnimeRequest::InProgress);
 
@@ -30,6 +80,10 @@ AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
     return req;
 }
 
+QQuickImageProvider *AnimeDetailsProvider::imageProvider() { return m_imageProvider; }
+
+QString AnimeDetailsProvider::imageProviderName() { return qmlImageProvider; }
+
 void AnimeDetailsRequest::parseNetworkReply(QNetworkReply *r) try {
     if (r->error() != QNetworkReply::NoError)
         throw tr("Network Reply - %1").arg(r->errorString());
@@ -43,7 +97,9 @@ void AnimeDetailsRequest::parseNetworkReply(QNetworkReply *r) try {
     }
 
     QJsonObject obj(doc.object());
-    setAnimeDetailsProp("malId", obj["mal_id"].toString());
+    const auto malId = obj["mal_id"].toInt();
+    setAnimeDetailsProp("imageUrl", m_imageProvider->cacheUrl(obj["image_url"].toString(), QString::number(malId)));
+    setAnimeDetailsProp("malId", malId);
     setAnimeDetailsProp("title", obj["title"].toString());
     setAnimeDetailsProp("englistTitle", obj["title_english"].toString());
     setAnimeDetailsProp("japaneseTitle", obj["title_japanese"].toString());
@@ -51,7 +107,6 @@ void AnimeDetailsRequest::parseNetworkReply(QNetworkReply *r) try {
     setAnimeDetailsProp("episodes", obj["episodes"].toInt());
     setAnimeDetailsProp("status", obj["status"].toString());
     setAnimeDetailsProp("duration", obj["duration"].toString());
-    setAnimeDetailsProp("imageUrl", obj["image_url"].toString());
     setAnimeDetailsProp("score", obj["score"].toDouble());
     setAnimeDetailsProp("scoredBy", obj["scored_by"].toInt());
     setAnimeDetailsProp("rank", obj["rank"].toInt());

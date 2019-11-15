@@ -3,6 +3,9 @@
 
 #include <QObject>
 
+#include <QUrl>
+
+
 class AnimeRequest : public QObject {
     Q_OBJECT
 
@@ -35,7 +38,6 @@ protected slots:
     virtual void parseNetworkReply(class QNetworkReply *) = 0;
 
 protected:
-
     void setStatus(RequestStatus status, const QString &err = {}) {
         if (m_status == status)
             return;

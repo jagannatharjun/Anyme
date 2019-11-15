@@ -5,8 +5,9 @@
 #include <QObject>
 #include <QQmlPropertyMap>
 
-
 class QNetworkAccessManager;
+class QQuickImageProvider;
+class AnimeDetailsImageProvider;
 
 class AnimeDetails : public QQmlPropertyMap {
     Q_OBJECT
@@ -17,19 +18,19 @@ public:
 
 class AnimeDetailsRequest : public AnimeRequest {
 public:
-    AnimeDetailsRequest(QObject *parent = nullptr)
-        : AnimeRequest(parent), m_details(new AnimeDetails(this)) {}
+    AnimeDetailsRequest(AnimeDetailsImageProvider *img, QObject *parent = nullptr)
+        : AnimeRequest(parent), m_details(new AnimeDetails(this)), m_imageProvider(img) {}
 
     friend class AnimeDetailsProvider;
     AnimeDetails *details() const;
 
 private:
     AnimeDetails *m_details;
+    AnimeDetailsImageProvider *m_imageProvider;
     void setAnimeDetailsProp(const char *prop, const QVariant &v) { m_details->insert(prop, v); }
 
 private:
     void parseNetworkReply(class QNetworkReply *) override;
-
 };
 
 class AnimeDetailsProvider : public QObject {
@@ -37,11 +38,14 @@ class AnimeDetailsProvider : public QObject {
 
 public:
     AnimeDetailsProvider(QNetworkAccessManager *i, QObject *parent);
+    ~AnimeDetailsProvider();
     AnimeDetailsRequest *requestAnimeDetails(int malId);
+    QQuickImageProvider *imageProvider();
+    QString imageProviderName();
 
 private:
     QNetworkAccessManager *m_networkManager;
-
+    AnimeDetailsImageProvider *m_imageProvider;
 };
 
 #endif // ANIMEDETAILSPROVIDER_HPP

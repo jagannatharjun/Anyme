@@ -18,6 +18,8 @@
 static QFileSystemWatcher *qmlWatcher;
 #endif
 
+#include <QQuickImageProvider>
+
 Application::Application(int &argc, char **argv)
     : QGuiApplication(argc, argv), m_networkManager(new QNetworkAccessManager(this)),
       m_animeList(new AnimeListModelProvider(m_networkManager, this)),
@@ -36,6 +38,7 @@ void Application::loadAnimeInfo(int malId) {
                      {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
 }
 
+
 QQmlContext *Application::load(const QString &path,
                                const QVector<QQmlContext::PropertyPair> &props) {
 #ifdef LIVE_QML
@@ -45,6 +48,8 @@ QQmlContext *Application::load(const QString &path,
         qmlWatcher->addPath(QMLDIR);
     }
     view->rootContext()->setContextProperties(props);
+    view->engine()->addImageProvider(m_animeDetailsProvider->imageProviderName(),
+                                     m_animeDetailsProvider->imageProvider());
     setContext(view->rootContext());
     view->setSource(QUrl::fromLocalFile(path));
     connect(qmlWatcher, &QFileSystemWatcher::directoryChanged, [view, path](const QString &p) {

@@ -50,10 +50,9 @@ Rectangle {
 
     Connections {
         target: animeReq
-        onIsCompletedChanged: {
-            if(animeReq.isCompleted) {
+        onCompleted: {
                 pageLoader.setSource(animeDetailsQmlSource)
-            }
+
         }
     }
 

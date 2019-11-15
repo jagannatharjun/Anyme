@@ -50,6 +50,11 @@ GridView {
                 source: imageUrl
                 id: img
                 fillMode: Image.PreserveAspectCrop
+
+                BusyIndicator {
+                    anchors.centerIn: parent
+                    running: img.status == Image.Loading
+                }
             }
 
             Text {

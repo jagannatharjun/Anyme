@@ -16,6 +16,17 @@
 #define MYQMLPATH(FILE) QMLDIR FILE
 #define MYQMLURL(FILE) QUrl::fromLocalFile(MYQMLPATH(FILE))
 static QFileSystemWatcher *qmlWatcher;
+
+class MyQuickView : public QQuickView {
+protected:
+    bool event(QEvent *event) override {
+        if (event->type() == QEvent::Close) {
+            deleteLater();
+        }
+        return QQuickView::event(event);
+    }
+};
+
 #endif
 
 Application::Application(int &argc, char **argv)
@@ -30,16 +41,16 @@ Application::Application(int &argc, char **argv)
 void Application::loadAnimeInfo(int malId) {
     qDebug() << malId;
     auto rq = m_animeDetailsProvider->requestAnimeDetails(malId);
-    auto ctx = load(MYQMLPATH("animeDetailsLoader.qml"),
-                    {{"animeReq", QVariant::fromValue(rq)},
-                     {"anime", QVariant::fromValue(rq->details())},
-                     {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
+    auto p = load(MYQMLPATH("animeDetailsLoader.qml"),
+                  {{"animeReq", QVariant::fromValue(rq)},
+                   {"anime", QVariant::fromValue(rq->details())},
+                   {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
+    rq->setParent(p);
 }
 
-QQmlContext *Application::load(const QString &path,
-                               const QVector<QQmlContext::PropertyPair> &props) {
+QObject *Application::load(const QString &path, const QVector<QQmlContext::PropertyPair> &props) {
 #ifdef LIVE_QML
-    auto view = new QQuickView();
+    auto view = new MyQuickView();
     if (!qmlWatcher) {
         qmlWatcher = new QFileSystemWatcher(this);
         qmlWatcher->addPath(QMLDIR);
@@ -48,7 +59,6 @@ QQmlContext *Application::load(const QString &path,
     setContext(view->rootContext());
     view->setSource(QUrl::fromLocalFile(path));
     connect(qmlWatcher, &QFileSystemWatcher::directoryChanged, [view, path](const QString &p) {
-        qDebug() << "reloading " << path << " arg " << p;
         view->setSource(QUrl());
         view->engine()->clearComponentCache();
         view->setSource(QUrl::fromLocalFile(path));
@@ -56,7 +66,7 @@ QQmlContext *Application::load(const QString &path,
     });
     view->resize(900, 540);
     view->show();
-    return view->rootContext();
+    return view;
 #else
     static_assert(0, "lol");
 #endif

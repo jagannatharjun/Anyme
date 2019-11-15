@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QQmlPropertyMap>
 
-
 class QNetworkAccessManager;
 
 class AnimeDetails : public QQmlPropertyMap {
@@ -29,7 +28,6 @@ private:
 
 private:
     void parseNetworkReply(class QNetworkReply *) override;
-
 };
 
 class AnimeDetailsProvider : public QObject {
@@ -41,7 +39,6 @@ public:
 
 private:
     QNetworkAccessManager *m_networkManager;
-
 };
 
 #endif // ANIMEDETAILSPROVIDER_HPP

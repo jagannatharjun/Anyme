@@ -21,11 +21,6 @@ AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
         req->parseNetworkReply(rep);
         rep->deleteLater();
     });
-    connect(rep, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-            [req, rep](QNetworkReply::NetworkError) {
-                req->setStatus(AnimeRequest::RequestStatus::Error,
-                               tr("Network Error - %1").arg(rep->errorString()));
-            });
     connect(rep, &QNetworkReply::sslErrors, [rep]() { rep->ignoreSslErrors(); });
     return req;
 }

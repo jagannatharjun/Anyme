@@ -29,7 +29,7 @@ private:
     AnimeListModelProvider *m_animeList;
     AnimeDetailsProvider *m_animeDetailsProvider;
 
-    QQmlContext *load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
+    QObject *load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
     void setContext(QQmlContext *ctx);
 };
 

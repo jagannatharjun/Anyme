@@ -51,13 +51,12 @@ Rectangle {
     Connections {
         target: animeReq
         onCompleted: {
-                pageLoader.setSource(animeDetailsQmlSource)
-
+            pageLoader.setSource(animeDetailsQmlSource)
         }
     }
 
     Loader {
         anchors.fill: parent
-        id : pageLoader
+        id: pageLoader
     }
 }

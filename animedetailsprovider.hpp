@@ -2,12 +2,11 @@
 #define ANIMEDETAILSPROVIDER_HPP
 
 #include "animerequest.hpp"
-
 #include <QObject>
-
 #include <QQmlPropertyMap>
 
-#include <QDebug>
+
+class QNetworkAccessManager;
 
 class AnimeDetails : public QQmlPropertyMap {
     Q_OBJECT
@@ -35,12 +34,13 @@ private:
 
 class AnimeDetailsProvider : public QObject {
     Q_OBJECT
+
 public:
-    AnimeDetailsProvider(QObject *parent);
+    AnimeDetailsProvider(QNetworkAccessManager *i, QObject *parent);
     AnimeDetailsRequest *requestAnimeDetails(int malId);
 
 private:
-    class QNetworkAccessManager *m_networkManager;
+    QNetworkAccessManager *m_networkManager;
 
 };
 

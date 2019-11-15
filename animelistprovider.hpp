@@ -12,7 +12,7 @@ class QNetworkReply;
 class AnimeListProvider : public AnimeRequest {
     Q_OBJECT
 public:
-    explicit AnimeListProvider(QObject *parent = nullptr);
+    explicit AnimeListProvider(QNetworkAccessManager *i, QObject *parent = nullptr);
     Q_INVOKABLE static const QStringList &categoryList();
 
 private slots:

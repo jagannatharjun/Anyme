@@ -6,8 +6,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-AnimeDetailsProvider::AnimeDetailsProvider(QObject *parent)
-    : QObject(parent), m_networkManager(new QNetworkAccessManager(this)) {}
+AnimeDetailsProvider::AnimeDetailsProvider(QNetworkAccessManager *i, QObject *parent)
+    : QObject(parent), m_networkManager(i) {}
 
 AnimeDetailsRequest *AnimeDetailsProvider::requestAnimeDetails(int malId) {
     AnimeDetailsRequest *req(new AnimeDetailsRequest(this));

@@ -11,8 +11,8 @@
 
 #include <QDebug>
 
-AnimeListProvider::AnimeListProvider(QObject *parent)
-    : AnimeRequest(parent), m_networkManager(new QNetworkAccessManager(this)) {}
+AnimeListProvider::AnimeListProvider(QNetworkAccessManager *i, QObject *parent)
+    : AnimeRequest(parent), m_networkManager(i) {}
 
 const QStringList &AnimeListProvider::categoryList() {
     static const QStringList l = {"airing", "upcoming", "tv",           "movie",
@@ -38,8 +38,7 @@ void AnimeListProvider::requestAnimeList(int page, int categoryIndex) {
     });
 }
 
-void AnimeListProvider::cancelCurrentRequest()
-{
+void AnimeListProvider::cancelCurrentRequest() {
     if (!isLoading())
         return;
     Q_ASSERT(m_currentRequest);

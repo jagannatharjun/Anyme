@@ -49,7 +49,7 @@ class AnimeListModelProvider : public AnimeListProvider {
         int categoryIndex READ categoryIndex WRITE setCategoryIndex NOTIFY categoryIndexChanged)
 
 public:
-    explicit AnimeListModelProvider(QObject *parent = nullptr);
+    explicit AnimeListModelProvider(QNetworkAccessManager * i, QObject *parent = nullptr);
 
     Q_INVOKABLE static QStringList categoryList();
 

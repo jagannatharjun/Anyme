@@ -3,6 +3,7 @@
 #include "animelistmodelprovider.hpp"
 
 #include <QDebug>
+#include <QNetworkAccessManager>
 #include <QQmlContext>
 #include <QQuickStyle>
 
@@ -18,8 +19,9 @@ static QFileSystemWatcher *qmlWatcher;
 #endif
 
 Application::Application(int &argc, char **argv)
-    : QGuiApplication(argc, argv), m_animeList(new AnimeListModelProvider(this)),
-      m_animeDetailsProvider(new AnimeDetailsProvider(this)) {
+    : QGuiApplication(argc, argv), m_networkManager(new QNetworkAccessManager(this)),
+      m_animeList(new AnimeListModelProvider(m_networkManager, this)),
+      m_animeDetailsProvider(new AnimeDetailsProvider(m_networkManager, this)) {
     QQuickStyle::setStyle("Material");
     setContext(m_engine.rootContext());
     load(MYQMLPATH("mainWindow.qml"));
@@ -28,10 +30,10 @@ Application::Application(int &argc, char **argv)
 void Application::loadAnimeInfo(int malId) {
     qDebug() << malId;
     auto rq = m_animeDetailsProvider->requestAnimeDetails(malId);
-    auto ctx =
-        load(MYQMLPATH("animeDetailsLoader.qml"), {{"animeReq", QVariant::fromValue(rq)},
-                                                   {"anime", QVariant::fromValue(rq->details())},
-                                                   {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
+    auto ctx = load(MYQMLPATH("animeDetailsLoader.qml"),
+                    {{"animeReq", QVariant::fromValue(rq)},
+                     {"anime", QVariant::fromValue(rq->details())},
+                     {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
 }
 
 QQmlContext *Application::load(const QString &path,

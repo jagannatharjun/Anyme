@@ -6,7 +6,7 @@
 
 #include <QDebug>
 
-AnimeListModelProvider::AnimeListModelProvider(QObject *parent) : AnimeListProvider(parent) {
+AnimeListModelProvider::AnimeListModelProvider(QNetworkAccessManager *i, QObject *parent) : AnimeListProvider(i, parent) {
     m_model = new AnimeListModel(this);
 }
 

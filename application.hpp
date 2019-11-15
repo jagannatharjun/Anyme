@@ -6,6 +6,7 @@
 #include <QQmlContext>
 #include <QQmlPropertyMap>
 
+class QNetworkAccessManager;
 class AnimeListModelProvider;
 class AnimeDetailsProvider;
 
@@ -24,6 +25,7 @@ private:
 
     QQmlApplicationEngine m_engine;
     Theme m_theme;
+    QNetworkAccessManager *m_networkManager;
     AnimeListModelProvider *m_animeList;
     AnimeDetailsProvider *m_animeDetailsProvider;
 

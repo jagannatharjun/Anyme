@@ -24,6 +24,7 @@ const QStringList &AnimeListProvider::categoryList() {
 }
 
 void AnimeListProvider::requestAnimeList(int page, int categoryIndex) {
+    qDebug("Requesting");
     m_networkManager->get(
         QNetworkRequest(QUrl(QString("https://api.jikan.moe/v3/top/anime/%1/%2")
                                  .arg(QString::number(page), categoryList()[categoryIndex]))));

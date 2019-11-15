@@ -13,6 +13,7 @@
 #include <QQuickView>
 #define QMLDIR "E:/Cpp/Projects/Gui/anime/qml/"
 #define MYQMLPATH(FILE) QMLDIR FILE
+#define MYQMLURL(FILE) QUrl::fromLocalFile(MYQMLPATH(FILE))
 static QFileSystemWatcher *qmlWatcher;
 #endif
 
@@ -26,12 +27,11 @@ Application::Application(int &argc, char **argv)
 
 void Application::loadAnimeInfo(int malId) {
     qDebug() << malId;
-    auto ctx = load(MYQMLPATH("anime.qml"));
     auto rq = m_animeDetailsProvider->requestAnimeDetails(malId);
-    connect(rq, &AnimeDetailsRequest::completed, [ctx](AnimeDetails *det) {
-        ctx->setContextProperty("anime", det);
-        qDebug() << det->dynamicPropertyNames();
-    });
+    auto ctx =
+        load(MYQMLPATH("animeDetailsLoader.qml"), {{"animeReq", QVariant::fromValue(rq)},
+                                                   {"anime", QVariant::fromValue(rq->details())},
+                                                   {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
 }
 
 QQmlContext *Application::load(const QString &path,
@@ -70,7 +70,7 @@ Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
     insert("primary", QColor("#ea80fc"));
     insert("primaryDark", QColor("#d500f9"));
     insert("primaryDarkForeground", QColor(Qt::white));
-    insert("primaryForeground", QColor(61,61,61));
+    insert("primaryForeground", QColor(61, 61, 61));
 
     insert("accent", QColor("#03dac5"));
     insert("accentForeground", QColor(Qt::white));
@@ -78,16 +78,16 @@ Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
     insert("background", QColor("#303030"));
     insert("foreground", QColor(Qt::white));
 
-    insert("disabledText", QColor(96,96,96));
+    insert("disabledText", QColor(96, 96, 96));
 
-//    insert("accent", QColor());
+    //    insert("accent", QColor());
 
-//    insert("primary", QColor(Qt::white));
-//    insert("primaryDark", QColor(Qt::white));
-//    insert("primaryForeground", QColor(Qt::black));
-//    insert("primarySurface", QColor(Qt::black));
-//    insert("primarySurfaceForegound", QColor(Qt::black));
+    //    insert("primary", QColor(Qt::white));
+    //    insert("primaryDark", QColor(Qt::white));
+    //    insert("primaryForeground", QColor(Qt::black));
+    //    insert("primarySurface", QColor(Qt::black));
+    //    insert("primarySurfaceForegound", QColor(Qt::black));
 
-//    insert("background", QColor(Qt::white));
-//    insert("foreground", QColor(Qt::black));
+    //    insert("background", QColor(Qt::white));
+    //    insert("foreground", QColor(Qt::black));
 }

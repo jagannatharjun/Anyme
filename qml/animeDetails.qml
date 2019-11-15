@@ -27,6 +27,30 @@ Rectangle {
     color: theme.background
     property alias myFont: fonts.bigShoulder
 
+
+    Rectangle {
+        anchors.fill: parent
+        z: 10
+        color: theme.background
+        visible: animeReq.isLoading || animeReq.isError
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: animeReq.isLoading
+        }
+
+        Text {
+            anchors.centerIn: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            visible: animeReq.isError
+            text: animeReq.errorString
+            font.family: myFont.name
+            font.pixelSize: 24
+            color: theme.disabledText
+        }
+    }
+
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -123,8 +147,7 @@ Rectangle {
                 font.family: bigShoulderRegular.name
                 font.weight: Font.Bold
 
-                color: topLabels.selectedIndex
-                       === index ? theme.foreground : theme.disabledText
+                color: topLabels.selectedIndex === index ? theme.foreground : theme.disabledText
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {

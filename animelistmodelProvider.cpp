@@ -7,7 +7,7 @@
 #include <QDebug>
 
 AnimeListModelProvider::AnimeListModelProvider(QObject *parent)
-    : QObject(parent), m_animeListProvider(new AnimeListProvider(this)) {
+    : AnimeRequest(parent), m_animeListProvider(new AnimeListProvider(this)) {
     m_model = new AnimeListModel(this);
 
     connect(m_animeListProvider, &AnimeListProvider::gotAnime,
@@ -15,9 +15,9 @@ AnimeListModelProvider::AnimeListModelProvider(QObject *parent)
     connect(m_animeListProvider, &AnimeListProvider::animeListRequestDone,
             [this](bool failure, const QString &err) {
                 if (failure) {
-                    setIsError(true, err);
+                    setStatus(RequestStatus::Error, err);
                 }
-                setGettingList(false);
+                setStatus(RequestStatus::Completed);
             });
 
     setCategoryIndex(0);
@@ -31,12 +31,10 @@ QStringList AnimeListModelProvider::categoryList() {
 
 AnimeListModel *AnimeListModelProvider::model() const { return m_model; }
 
-bool AnimeListModelProvider::gettingList() const { return m_gettingList; }
-
 int AnimeListModelProvider::categoryIndex() const { return m_categoryIndex; }
 
 void AnimeListModelProvider::setCategoryIndex(int categoryIndex) {
-    if (gettingList() || (m_categoryIndex == categoryIndex && m_model->size() != 0))
+    if (isLoading() || (m_categoryIndex == categoryIndex && m_model->size() != 0))
         return;
 
     m_categoryIndex = categoryIndex;
@@ -44,14 +42,15 @@ void AnimeListModelProvider::setCategoryIndex(int categoryIndex) {
 
     m_model->clear();
     m_pageNumber = 1;
-    setGettingList(true);
+
+    setStatus(RequestStatus::InProgress);
     m_animeListProvider->requestAnimeList(m_pageNumber, m_categoryIndex);
 }
 
 const QString &AnimeListModelProvider::category() const { return categoryList()[m_categoryIndex]; }
 
 void AnimeListModelProvider::nextPage() {
-    setGettingList(true);
+    setStatus(RequestStatus::InProgress);
     m_animeListProvider->requestAnimeList(++m_pageNumber, m_categoryIndex);
 }
 
@@ -61,12 +60,6 @@ void AnimeListModel::clear() {
     endResetModel();
 }
 
-Anime AnimeListModel::getAnimeById(int id) const {
-    auto f = std::find_if(m_animes.cbegin(), m_animes.cend(),
-                          [id](const Anime &a) { return a.malId() == id; });
-    Q_ASSERT(f != m_animes.cend());
-    return *f;
-}
 
 void AnimeListModel::addAnime(Anime anime) {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
@@ -124,25 +117,4 @@ QHash<int, QByteArray> AnimeListModel::roleNames() const {
     roles[MembersRole] = "members";
     roles[ScoreRole] = "score";
     return roles;
-}
-
-void AnimeListModelProvider::setGettingList(bool gettingList) {
-    if (m_gettingList == gettingList)
-        return;
-
-    m_gettingList = gettingList;
-    emit gettingListChanged(m_gettingList);
-}
-
-bool AnimeListModelProvider::isError() const { return m_isError; }
-
-QString AnimeListModelProvider::errorString() const { return m_errorString; }
-
-void AnimeListModelProvider::setIsError(bool isError, const QString &err) {
-    if (m_isError == isError && err != m_errorString)
-        return;
-
-    m_errorString = err;
-    m_isError = isError;
-    emit errorChanged(m_isError);
 }

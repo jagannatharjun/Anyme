@@ -7,7 +7,7 @@
         <file>font/Montserrat-Regular.otf</file>
         <file>font/MontserratAlternates-SemiBold.otf</file>
         <file>icon/menu-24px.svg</file>
-        <file>qml/anime.qml</file>
+        <file>qml/animeDetails.qml</file>
         <file>qml/MyFonts.qml</file>
         <file>font/BigShouldersDisplay-Regular.ttf</file>
         <file>font/Oswald-Regular.ttf</file>
@@ -15,5 +15,6 @@
         <file>font/Oswald-Medium.ttf</file>
         <file>icon/logo.png</file>
         <file>icon/drop-down.png</file>
+        <file>qml/animeDetailsLoader.qml</file>
     </qresource>
 </RCC>

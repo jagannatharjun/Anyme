@@ -84,27 +84,27 @@ Rectangle {
         id: animeGrid
 
         onAtYEndChanged: {
-            if (atYEnd && !animelist.gettingList)
+            if (atYEnd && !animelist.isLoading)
                 animelist.nextPage()
         }
 
         footer: Item {
             id: animeGridNotif
-            visible: animelist.isError || animelist.gettingList
+            visible: animelist.isError || animelist.isLoading
             height: 100
             anchors.left: parent.left
             anchors.right: parent.right
 
             BusyIndicator {
                 anchors.centerIn: parent
-                running: animelist.gettingList
+                running: animelist.isLoading
             }
 
             Text {
                 anchors.centerIn: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                visible: animelist.isError && !animelist.gettingList
+                visible: animelist.isError
                 text: animelist.errorString
                 font.family: myFont.name
                 font.pixelSize: 24

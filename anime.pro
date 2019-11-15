@@ -39,6 +39,7 @@ HEADERS += \
     animedetailsprovider.hpp \
     animelistmodelprovider.hpp \
     animelistprovider.hpp \
+    animerequest.hpp \
     application.hpp
 
 DISTFILES +=

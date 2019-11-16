@@ -63,7 +63,6 @@ GridView {
                 anchors.left: img.left
                 width: parent.width
                 height: ribbionHeight
-
                 font.family: fonts.sansSerifBold.name
                 text: title
                 color: theme.foreground

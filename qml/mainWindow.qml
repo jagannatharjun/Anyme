@@ -140,205 +140,35 @@ Rectangle {
     Rectangle {
         width: leftBar.width
         height: window.height
-        color: theme.primaryDark
+        color: theme.primary
     }
 
-    Flickable {
+    Item {
         id: leftBar
         //    color: theme.primary
         height: parent.height
-        contentHeight: leftBarContent.childrenRect.height
-        boundsBehavior: Flickable.StopAtBounds
-        ScrollBar.vertical: ScrollBar {
-            visible: true
-            width: 8
-        }
+        //contentHeight: leftBarContent.childrenRect.height
+        //boundsBehavior: Flickable.StopAtBounds
+        //        ScrollBar.vertical: ScrollBar {
+        //            visible: true
+        //            width: 8
+        //        }
         clip: true
 
-        Item {
-            id: leftBarContent
-            anchors.fill: parent
-            Image {
-                id: img
-                source: 'qrc:/icon/logo.png'
-                width: 81
-                height: 104
-                x: 11
-                y: 17
-            }
+        Image {
+            x: 16
+            y: 20
+            source: "qrc:/icon/logo.png"
+            id: logoImg
+        }
 
-            Text {
-                anchors.verticalCenter: img.verticalCenter
-                x: 117
-                font.family: fonts.bigShoulder.name
-                color: theme.primaryDarkForeground
-                text: 'ANIME'
-                font.pixelSize: 30
-            }
-
-            NavigationButton {
-                anchors.right: parent.right
-                anchors.left: parent.left
-                y: 134
-
-                buttonTxt: 'Top'
-                id: topButton
-
-                onClicked: dropDown.toogleState()
-
-                Component.onCompleted: select();
-
-                Image {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 12
-                    anchors.verticalCenter: parent.verticalCenter
-                    source: 'qrc:/icon/drop-down.png'
-                    fillMode: Image.PreserveAspectFit
-                    transformOrigin: Item.Center
-                    id: dropDown
-
-                    function toogleState() {
-                        state = isCollapsed ? 'DROPPED' : 'COLLAPSED'
-                    }
-
-                    ColorOverlay {
-                        source: dropDown
-                        color: topButton.foregroundColor
-                        anchors.fill: dropDown
-                    }
-
-                    property bool isCollapsed: state == 'COLLAPSED'
-
-                    states: [
-                        State {
-                            name: "COLLAPSED"
-                            PropertyChanges {
-                                target: dropDown
-                                rotation: 180
-                            }
-                        },
-                        State {
-                            name: "DROPPED"
-                            PropertyChanges {
-                                target: dropDown
-                                rotation: 0
-                            }
-                        }
-                    ]
-
-                    transitions: [
-                        Transition {
-                            from: "COLLAPSED"
-                            to: "DROPPED"
-                            reversible: true
-                            NumberAnimation {
-                                properties: "rotation"
-                                duration: 100
-                            }
-                        }
-                    ]
-                }
-
-            }
-
-            Rectangle{
-                anchors.fill: catlist
-                color: topButton.backgroundColor
-            }
-
-            ListView {
-                id: catlist
-                anchors.top: topButton.bottom
-                width: leftBar.width
-                interactive: false
-                model: animelist.categoryList()
-                clip: true
-                delegate: Rectangle {
-                    width: leftBar.width
-                    height: 34
-                    color: mouseArea.containsMouse
-                           || animelist.categoryIndex == index ? theme.background : 'transparent'
-                    MouseArea {
-                        anchors.fill: parent
-                        id: mouseArea
-                        onClicked: animelist.categoryIndex = index
-                        hoverEnabled: true
-                    }
-
-                    Text {
-                        x: topButton.x + 12
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.family: fonts.bigShoulder.name
-                        color: mouseArea.containsMouse
-                               || animelist.categoryIndex
-                               == index ? theme.foreground : theme.primaryForeground
-                        text: model.modelData.charAt(0).toUpperCase(
-                                  ) + model.modelData.slice(1)
-                        font.pixelSize: 20
-                        font.underline: animelist.categoryIndex == index
-                    }
-                }
-
-                state: dropDown.isCollapsed ? 'COLLAPSED' : 'DROPPED'
-
-                height: 34 * catlist.count
-                states: [
-                    State {
-                        name: "COLLAPSED"
-                        PropertyChanges {
-                            target: catlist
-                            height: 0
-                        }
-                    },
-                    State {
-                        name: "DROPPED"
-                        PropertyChanges {
-                            target: catlist
-                            height: 34 * catlist.count
-                        }
-                    }
-                ]
-
-                transitions: [
-                    Transition {
-                        from: "COLLAPSED"
-                        to: "DROPPED"
-                        reversible: true
-                        NumberAnimation {
-                            properties: "height,anchors.topMargin"
-                            duration: 256
-                        }
-                    }
-                ]
-            }
-
-            NavigationButton {
-                anchors.right: parent.right
-                anchors.left: parent.left
-                anchors.top: catlist.bottom
-                buttonTxt: 'Search'
-                id : searchBtn
-
-                Component.onCompleted: unselect()
-
-                Image {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 12
-                    anchors.verticalCenter: parent.verticalCenter
-                    source: 'qrc:/icon/arrow_forward-24px.png'
-                    fillMode: Image.PreserveAspectFit
-                    id: searchNext
-
-                    height: parent.height
-                    width: 24
-                }
-
-                ColorOverlay {
-                    source: searchNext
-                    color: searchBtn.foregroundColor
-                    anchors.fill: searchNext
-                }
-            }
+        Text {
+            font.family: fonts.bigShoulderRegular.name
+            font.pixelSize: 37
+            color: theme.primaryForeground
+            text: "ANIME"
+            x: 120
+            anchors.verticalCenter: logoImg.verticalCenter
         }
 
         Component.onCompleted: state = 'COLLAPSED'
@@ -370,6 +200,107 @@ Rectangle {
                 }
             }
         ]
+    }
+
+    Item {
+        parent: leftBar
+        id: leftBarContent
+        anchors.fill: parent
+
+        property int sepMargin: 6
+
+        NavigationSeperator {
+            y: 147
+            id: animeSep
+        }
+
+        NavigationButton {
+            x: 0
+            anchors.top: animeSep.bottom
+            anchors.topMargin: parent.sepMargin
+            id: homeBtn
+        }
+
+        NavigationSeperator {
+            anchors.top: homeBtn.bottom
+            anchors.topMargin: parent.sepMargin
+        }
+
+        Text {
+            font.pixelSize: 20
+            font.family: fonts.bigShoulderLight.name
+            color: theme.background
+            font.weight: Font.Medium
+            x: 17.875
+            y: 212.5
+            text: 'Browse'
+            id: browseText
+        }
+
+        Column {
+            x: 0
+            y: 246
+            Repeater {
+
+                model: ListModel {
+                    ListElement {
+                        btnText: 'Airing'
+                        iconUrl: 'qrc:/icon/NavigationIcons/airing.png'
+                    }
+                    ListElement {
+                        btnText: 'Upcoming'
+                        iconUrl: 'qrc:/icon/NavigationIcons/upcoming.png'
+                    }
+                    ListElement {
+                        btnText: 'TV'
+                        iconUrl: 'qrc:/icon/NavigationIcons/tv.png'
+                    }
+                    ListElement {
+                        btnText: 'Movie'
+                        iconUrl: 'qrc:/icon/NavigationIcons/movie.png'
+                    }
+                    ListElement {
+                        btnText: 'OVA'
+                        iconUrl: 'qrc:/icon/NavigationIcons/ova.png'
+                    }
+                    ListElement {
+                        btnText: 'Special'
+                        iconUrl: 'qrc:/icon/NavigationIcons/special.png'
+                    }
+                    ListElement {
+                        btnText: 'Popular'
+                        iconUrl: 'qrc:/icon/NavigationIcons/popular.png'
+                    }
+                    ListElement {
+                        btnText: 'Favorite'
+                        iconUrl: 'qrc:/icon/NavigationIcons/favorite.png'
+                    }
+                }
+
+                delegate: CategoryButtonDelegate {
+                    isSelected: animelist.categoryIndex == index
+                    onClicked: animelist.categoryIndex = index
+                }
+            }
+        }
+
+        NavigationSeperator {
+            anchors.bottom: searchBtn.top
+            anchors.bottomMargin: parent.sepMargin
+        }
+
+        NavigationButton {
+            anchors.bottom: bottomSep.top
+            anchors.bottomMargin: parent.sepMargin
+            btnText: 'Search'
+            id: searchBtn
+        }
+
+        NavigationSeperator {
+            anchors.bottom: leftBarContent.bottom
+            anchors.bottomMargin: parent.sepMargin
+            id: bottomSep
+        }
     }
 }
 

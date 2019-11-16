@@ -25,7 +25,14 @@ Item {
         id: sansSerifBold
         source: "qrc:/font/MontserratAlternates-SemiBold.otf"
     }
+
+    FontLoader {
+        id: bigShoulderLight
+        source: 'qrc:/font/BigShouldersDisplay-Light.ttf'
+    }
+
     readonly property alias bigShoulder: bigShoulder
+    readonly property alias bigShoulderLight: bigShoulderLight
     readonly property alias bigShoulderRegular: bigShoulderRegular
     readonly property alias sansSerif: sansSerif
     readonly property alias sansSerifBold: sansSerifBold

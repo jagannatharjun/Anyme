@@ -18,5 +18,17 @@
         <file>qml/animeDetailsLoader.qml</file>
         <file>qml/NavigationButton.qml</file>
         <file>icon/arrow_forward-24px.png</file>
+        <file>font/BigShouldersDisplay-Light.ttf</file>
+        <file>icon/NavigationIcons/airing.png</file>
+        <file>icon/NavigationIcons/favorite.png</file>
+        <file>icon/NavigationIcons/movie.png</file>
+        <file>icon/NavigationIcons/ova.png</file>
+        <file>icon/NavigationIcons/popular.png</file>
+        <file>icon/NavigationIcons/special.png</file>
+        <file>icon/NavigationIcons/tv.png</file>
+        <file>icon/NavigationIcons/upcoming.png</file>
+        <file>qml/CategoryButtonDelegate.qml</file>
+        <file>qml/NavigationSeperator.qml</file>
+        <file>qml/NavigationObject.qml</file>
     </qresource>
 </RCC>

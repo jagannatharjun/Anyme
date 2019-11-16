@@ -1,101 +1,33 @@
-import QtQuick 2.0
+import QtQuick 2.13
+import QtGraphicalEffects 1.13
 
-Item {
-    property string buttonTxt: 'None'
-    property color foregroundColor: theme.primaryDark
-    property color backgroundColor: theme.primaryDarkForeground
+NavigationObject {
 
-    signal clicked
-    signal selected
-    signal unselected
+    property string btnText: 'Home'
 
-    function unselect() {
-        state = 'Normal'
+    Image {
+        source: 'qrc:/icon/arrow_forward-24px.png'
+        anchors.verticalCenter: parent.verticalCenter
+        fillMode: Image.PreserveAspectFit
+        width: 16
+        height: 16
+        x: 225
+        id: icon
     }
 
-    function select() {
-        state = 'Selected'
-    }
-
-    onStateChanged: {
-        if (state == 'Normal')
-            unselected()
-        else if (state == 'Selected')
-            selected();
-    }
-
-    id: btn
-    height: 44
-
-    anchors.leftMargin: 12
-    anchors.rightMargin: 12
-
-    onClicked: {
-        select()
-    }
-
-    Rectangle {
-        anchors.right: parent.right
-        anchors.left: parent.left
-        height: 0
-        color: theme.disabledText
-        id: seperator
-    }
-
-    Rectangle {
-        x: -parent.anchors.leftMargin
-        anchors.top: seperator.bottom
-        width: parent.width + parent.anchors.leftMargin + parent.anchors.rightMargin
-        height: parent.height
-        color: backgroundColor
+    ColorOverlay {
+        source: icon
+        color: parent.foreground
+        anchors.fill: icon
     }
 
     Text {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 6
-        font.family: fonts.bigShoulder.name
-        color: foregroundColor
-        text: buttonTxt
         font.pixelSize: 26
-        id: txt
+        font.family: fonts.bigShoulder.name
+        color: parent.foreground
+        x: 19.625
+        anchors.verticalCenter: parent.verticalCenter
+        text: btnText
     }
 
-    MouseArea {
-        anchors.fill: parent
-        id: btnMouseArea
-        onClicked: btn.clicked()
-        hoverEnabled: true
-    }
-
-    states: [
-        State {
-            name: "Selected"
-            PropertyChanges {
-                target: btn
-                backgroundColor: theme.primary
-                foregroundColor: theme.primaryForeground
-            }
-        },
-        State {
-            name: "Normal"
-            PropertyChanges {
-                target: btn
-                backgroundColor: theme.primaryDark
-                foregroundColor: theme.primaryDarkForeground
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            from: "Normal"
-            to: "Selected"
-            reversible: true
-
-            ColorAnimation {
-                duration: 200
-            }
-        }
-    ]
 }

@@ -15,6 +15,7 @@ public:
     AnimeRequest(QObject *parent) : QObject(parent) {}
 
     enum RequestStatus { InProgress, Completed, Error };
+    Q_ENUM(RequestStatus);
 
     bool isLoading() const { return m_status == InProgress; }
     bool isError() const { return m_status == Error; }
@@ -51,8 +52,8 @@ protected:
             m_errorString = QString{};
         }
 
-        emit errorStringChanged(err);
         emit statusChanged();
+        emit errorStringChanged(err);
     }
 };
 

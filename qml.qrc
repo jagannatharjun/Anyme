@@ -16,5 +16,7 @@
         <file>icon/logo.png</file>
         <file>icon/drop-down.png</file>
         <file>qml/animeDetailsLoader.qml</file>
+        <file>qml/NavigationButton.qml</file>
+        <file>icon/arrow_forward-24px.png</file>
     </qresource>
 </RCC>

@@ -140,7 +140,7 @@ Rectangle {
     Rectangle {
         width: leftBar.width
         height: window.height
-        color: theme.primary
+        color: theme.primaryDark
     }
 
     Flickable {
@@ -171,96 +171,88 @@ Rectangle {
                 anchors.verticalCenter: img.verticalCenter
                 x: 117
                 font.family: fonts.bigShoulder.name
-                color: theme.primaryForeground
+                color: theme.primaryDarkForeground
                 text: 'ANIME'
                 font.pixelSize: 30
             }
 
-            Rectangle {
+            NavigationButton {
                 anchors.right: parent.right
                 anchors.left: parent.left
-                anchors.leftMargin: 12
-                anchors.rightMargin: 12
                 y: 134
-                height: 1
-                color: theme.disabledText
-                id: logoSeperator
+
+                buttonTxt: 'Top'
+                id: topButton
+
+                onClicked: dropDown.toogleState()
+
+                Component.onCompleted: select();
+
+                Image {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: 'qrc:/icon/drop-down.png'
+                    fillMode: Image.PreserveAspectFit
+                    transformOrigin: Item.Center
+                    id: dropDown
+
+                    function toogleState() {
+                        state = isCollapsed ? 'DROPPED' : 'COLLAPSED'
+                    }
+
+                    ColorOverlay {
+                        source: dropDown
+                        color: topButton.foregroundColor
+                        anchors.fill: dropDown
+                    }
+
+                    property bool isCollapsed: state == 'COLLAPSED'
+
+                    states: [
+                        State {
+                            name: "COLLAPSED"
+                            PropertyChanges {
+                                target: dropDown
+                                rotation: 180
+                            }
+                        },
+                        State {
+                            name: "DROPPED"
+                            PropertyChanges {
+                                target: dropDown
+                                rotation: 0
+                            }
+                        }
+                    ]
+
+                    transitions: [
+                        Transition {
+                            from: "COLLAPSED"
+                            to: "DROPPED"
+                            reversible: true
+                            NumberAnimation {
+                                properties: "rotation"
+                                duration: 100
+                            }
+                        }
+                    ]
+                }
+
             }
 
-            Text {
-                anchors.top: logoSeperator.bottom
-                anchors.left: logoSeperator.left
-                anchors.topMargin: 4
-                anchors.leftMargin: 4
-                font.family: fonts.bigShoulder.name
-                color: theme.primaryForeground
-                text: 'Top'
-                font.pixelSize: 26
-                id: topTxt
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: dropDown.toogleState()
-                }
-            }
-
-            Image {
-                anchors.right: logoSeperator.right
-                anchors.verticalCenter: topTxt.verticalCenter
-                source: 'qrc:/icon/drop-down.png'
-                transformOrigin: Item.Center
-                id: dropDown
-
-                function toogleState() {
-                    state = isCollapsed ? 'DROPPED' : 'COLLAPSED'
-                }
-
-                property bool isCollapsed: state == 'COLLAPSED'
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: dropDown.toogleState()
-                }
-
-                Component.onCompleted: state = 'COLLAPSED'
-
-                states: [
-                    State {
-                        name: "COLLAPSED"
-                        PropertyChanges {
-                            target: dropDown
-                            rotation: 180
-                        }
-                    },
-                    State {
-                        name: "DROPPED"
-                        PropertyChanges {
-                            target: dropDown
-                            rotation: 0
-                        }
-                    }
-                ]
-
-                transitions: [
-                    Transition {
-                        from: "COLLAPSED"
-                        to: "DROPPED"
-                        reversible: true
-                        NumberAnimation {
-                            properties: "rotation"
-                            duration: 100
-                        }
-                    }
-                ]
+            Rectangle{
+                anchors.fill: catlist
+                color: topButton.backgroundColor
             }
 
             ListView {
                 id: catlist
-                anchors.top: topTxt.bottom
+                anchors.top: topButton.bottom
                 width: leftBar.width
                 interactive: false
                 model: animelist.categoryList()
                 clip: true
-
                 delegate: Rectangle {
                     width: leftBar.width
                     height: 34
@@ -274,7 +266,7 @@ Rectangle {
                     }
 
                     Text {
-                        x: topTxt.x + 12
+                        x: topButton.x + 12
                         anchors.verticalCenter: parent.verticalCenter
                         font.family: fonts.bigShoulder.name
                         color: mouseArea.containsMouse
@@ -313,33 +305,39 @@ Rectangle {
                         to: "DROPPED"
                         reversible: true
                         NumberAnimation {
-                            properties: "height"
+                            properties: "height,anchors.topMargin"
                             duration: 256
                         }
                     }
                 ]
             }
-            Rectangle {
+
+            NavigationButton {
                 anchors.right: parent.right
                 anchors.left: parent.left
-                anchors.leftMargin: 12
-                anchors.rightMargin: 12
                 anchors.top: catlist.bottom
-                anchors.topMargin: 16
-                height: 1
-                color: theme.disabledText
-                id: topSeparator
-            }
+                buttonTxt: 'Search'
+                id : searchBtn
 
-            Text {
-                anchors.top: topSeparator.bottom
-                anchors.topMargin: 4
-                anchors.left: logoSeperator.left
-                anchors.leftMargin: 4
-                font.family: fonts.bigShoulder.name
-                color: theme.primaryForeground
-                text: 'Search'
-                font.pixelSize: 26
+                Component.onCompleted: unselect()
+
+                Image {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: 'qrc:/icon/arrow_forward-24px.png'
+                    fillMode: Image.PreserveAspectFit
+                    id: searchNext
+
+                    height: parent.height
+                    width: 24
+                }
+
+                ColorOverlay {
+                    source: searchNext
+                    color: searchBtn.foregroundColor
+                    anchors.fill: searchNext
+                }
             }
         }
 

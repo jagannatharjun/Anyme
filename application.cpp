@@ -79,12 +79,12 @@ void Application::setContext(QQmlContext *ctx) {
 }
 
 Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
-    insert("primary", QColor("#ea80fc"));
-    insert("primaryDark", QColor("#d500f9"));
+    insert("primary", QColor("#F8BBD0"));
+    insert("primaryDark", QColor("#C2185B"));
     insert("primaryDarkForeground", QColor(Qt::white));
     insert("primaryForeground", QColor(61, 61, 61));
 
-    insert("accent", QColor("#03dac5"));
+    insert("accent", QColor("#448AFF"));
     insert("accentForeground", QColor(Qt::white));
 
     insert("background", QColor("#303030"));

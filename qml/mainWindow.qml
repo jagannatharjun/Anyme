@@ -92,8 +92,7 @@ Rectangle {
 
         footer: Item {
             id: animeGridNotif
-            visible: animelist.isError || animelist.isLoading
-            height: 100
+            height: animelist.isError || animelist.isLoading ? 100 : 0
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -207,10 +206,10 @@ Rectangle {
         id: leftBarContent
         anchors.fill: parent
 
-        property int sepMargin: 6
+        property int sepMargin: 2
 
         NavigationSeperator {
-            y: 147
+            y: 140
             id: animeSep
         }
 
@@ -224,69 +223,73 @@ Rectangle {
         NavigationSeperator {
             anchors.top: homeBtn.bottom
             anchors.topMargin: parent.sepMargin
+            id: homeDownSep
         }
 
         Text {
-            font.pixelSize: 20
-            font.family: fonts.bigShoulderLight.name
-            color: theme.background
-            font.weight: Font.Medium
-            x: 17.875
-            y: 212.5
+            font.pixelSize: 18
+            font.family: fonts.bigShoulderRegular.name
+            color: theme.disabledText
+            font.weight: Font.DemiBold
+            x: 19.625
+            anchors.top: homeDownSep.bottom
+            anchors.topMargin: 4
             text: 'Browse'
             id: browseText
         }
 
-        Column {
-            x: 0
-            y: 246
-            Repeater {
-
-                model: ListModel {
-                    ListElement {
-                        btnText: 'Airing'
-                        iconUrl: 'qrc:/icon/NavigationIcons/airing.png'
-                    }
-                    ListElement {
-                        btnText: 'Upcoming'
-                        iconUrl: 'qrc:/icon/NavigationIcons/upcoming.png'
-                    }
-                    ListElement {
-                        btnText: 'TV'
-                        iconUrl: 'qrc:/icon/NavigationIcons/tv.png'
-                    }
-                    ListElement {
-                        btnText: 'Movie'
-                        iconUrl: 'qrc:/icon/NavigationIcons/movie.png'
-                    }
-                    ListElement {
-                        btnText: 'OVA'
-                        iconUrl: 'qrc:/icon/NavigationIcons/ova.png'
-                    }
-                    ListElement {
-                        btnText: 'Special'
-                        iconUrl: 'qrc:/icon/NavigationIcons/special.png'
-                    }
-                    ListElement {
-                        btnText: 'Popular'
-                        iconUrl: 'qrc:/icon/NavigationIcons/popular.png'
-                    }
-                    ListElement {
-                        btnText: 'Favorite'
-                        iconUrl: 'qrc:/icon/NavigationIcons/favorite.png'
-                    }
+        ListView {
+            x:0
+            anchors.top: browseText.bottom
+            anchors.topMargin: 6
+            anchors.bottom: searchUpSep.bottom
+            contentHeight: catModel.count * 40
+            model: ListModel {
+                id: catModel
+                ListElement {
+                    btnText: 'Airing'
+                    iconUrl: 'qrc:/icon/NavigationIcons/airing.png'
                 }
-
-                delegate: CategoryButtonDelegate {
-                    isSelected: animelist.categoryIndex == index
-                    onClicked: animelist.categoryIndex = index
+                ListElement {
+                    btnText: 'Upcoming'
+                    iconUrl: 'qrc:/icon/NavigationIcons/upcoming.png'
                 }
+                ListElement {
+                    btnText: 'TV'
+                    iconUrl: 'qrc:/icon/NavigationIcons/tv.png'
+                }
+                ListElement {
+                    btnText: 'Movie'
+                    iconUrl: 'qrc:/icon/NavigationIcons/movie.png'
+                }
+                ListElement {
+                    btnText: 'OVA'
+                    iconUrl: 'qrc:/icon/NavigationIcons/ova.png'
+                }
+                ListElement {
+                    btnText: 'Special'
+                    iconUrl: 'qrc:/icon/NavigationIcons/special.png'
+                }
+                ListElement {
+                    btnText: 'Popular'
+                    iconUrl: 'qrc:/icon/NavigationIcons/popular.png'
+                }
+                ListElement {
+                    btnText: 'Favorite'
+                    iconUrl: 'qrc:/icon/NavigationIcons/favorite.png'
+                }
+            }
+
+            delegate: CategoryButtonDelegate {
+                isSelected: animelist.categoryIndex == index
+                onClicked: animelist.categoryIndex = index
             }
         }
 
         NavigationSeperator {
             anchors.bottom: searchBtn.top
             anchors.bottomMargin: parent.sepMargin
+            id: searchUpSep
         }
 
         NavigationButton {

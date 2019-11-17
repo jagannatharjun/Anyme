@@ -64,7 +64,7 @@ QObject *Application::load(const QString &path, const QVector<QQmlContext::Prope
         view->setSource(QUrl::fromLocalFile(path));
         qmlWatcher->addPath(QMLDIR);
     });
-    view->resize(900, 680);
+    view->resize(900, 620);
     view->show();
     return view;
 #else

@@ -1,48 +1,10 @@
 #ifndef ANIMELIST_HPP
 #define ANIMELIST_HPP
 
-#include <QAbstractItemModel>
-#include <QObject>
+#include "animelistrequest.hpp"
+#include "animelistmodel.hpp"
 
-#include "anime.hpp"
-#include "animelistprovider.hpp"
-#include "animerequest.hpp"
-
-class AnimeListProvider;
-
-class AnimeListModel : public QAbstractListModel {
-    Q_OBJECT
-public:
-    enum AnimeRoles {
-        MalIdRole = Qt::UserRole + 1,
-        RankRole,
-        TitleRole,
-        UrlRole,
-        ImageUrlRole,
-        TypeRole,
-        EpisodesRole,
-        StartDateRole,
-        EndDateRole,
-        MembersRole,
-        ScoreRole,
-    };
-
-    void clear();
-    int size() const { return m_animes.size(); }
-
-    AnimeListModel(QObject *parent = 0) : QAbstractListModel(parent) {}
-    void addAnime(Anime anime);
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-protected:
-    QHash<int, QByteArray> roleNames() const;
-
-private:
-    QVector<Anime> m_animes;
-};
-
-class AnimeListModelProvider : public AnimeListProvider {
+class AnimeListModelProvider : public AnimeListRequest {
     Q_OBJECT
     Q_PROPERTY(AnimeListModel *model READ model)
     Q_PROPERTY(
@@ -69,6 +31,8 @@ private:
     int m_pageNumber = 1;
 
     void addAnime(Anime a) override;
+    void parseJsonReply(const QJsonDocument&) override;
+    void requestAnimeList(int page, int categoryIndex);
 };
 
 #endif // ANIMELIST_HPP

@@ -8,21 +8,25 @@
 
 class QNetworkAccessManager;
 class QNetworkReply;
+class QJsonDocument;
+class QJsonArray;
 
-class AnimeListProvider : public AnimeRequest {
+class AnimeListRequest : public AnimeRequest {
     Q_OBJECT
 public:
-    explicit AnimeListProvider(QNetworkAccessManager *i, QObject *parent = nullptr);
-    Q_INVOKABLE static const QStringList &categoryList();
+    explicit AnimeListRequest(QNetworkAccessManager *i, QObject *parent = nullptr);
 
 private slots:
     void parseNetworkReply(QNetworkReply *r) override;
 
 protected:
     virtual void addAnime(Anime anime) = 0;
+    virtual void
+    parseJsonReply(const QJsonDocument &doc) noexcept(false) = 0; // throw QString on error
 
-    void requestAnimeList(int page, int categoryIndex);
+    void request(const QUrl &url);
     void cancelCurrentRequest();
+    void jsonArrayToAnimes(const QJsonArray &); // calls addAnime
 
 private:
     QNetworkAccessManager *m_networkManager = nullptr;

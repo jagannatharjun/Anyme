@@ -66,7 +66,7 @@ QObject *Application::load(const QString &path, const QVector<QQmlContext::Prope
         view->setSource(QUrl::fromLocalFile(path));
         qmlWatcher->addPath(QMLDIR);
     });
-    view->resize(900, 620);
+    view->resize(936, 620);
     view->show();
     return view;
 #else
@@ -95,14 +95,15 @@ Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
 
     insert("disabledText", QColor(96, 96, 96));
 
-    //    insert("accent", QColor());
+//        insert("accent", QColor(Qt::white));
+//        insert("accentForeground", QColor(Qt::black));
 
-    //    insert("primary", QColor(Qt::white));
-    //    insert("primaryDark", QColor(Qt::white));
-    //    insert("primaryForeground", QColor(Qt::black));
-    //    insert("primarySurface", QColor(Qt::black));
-    //    insert("primarySurfaceForegound", QColor(Qt::black));
+//        insert("primary", QColor(Qt::white));
+//        insert("primaryDark", QColor(Qt::white));
+//        insert("primaryForeground", QColor(Qt::black));
+//        insert("primaryDarkForeground", QColor(Qt::black));
 
-    //    insert("background", QColor(Qt::white));
-    //    insert("foreground", QColor(Qt::black));
+//        insert("background", QColor(Qt::white));
+//        insert("foreground", QColor(Qt::black));
+//        insert("disabledText", QColor(96, 96, 96));
 }

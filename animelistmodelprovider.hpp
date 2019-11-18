@@ -1,17 +1,17 @@
 #ifndef ANIMELIST_HPP
 #define ANIMELIST_HPP
 
-#include "animelistrequest.hpp"
 #include "animelistmodel.hpp"
+#include "animelistrequest.hpp"
 
 class AnimeListModelProvider : public AnimeListRequest {
     Q_OBJECT
-    Q_PROPERTY(AnimeListModel *model READ model)
+    Q_PROPERTY(AnimeListModel *model READ model CONSTANT)
     Q_PROPERTY(
         int categoryIndex READ categoryIndex WRITE setCategoryIndex NOTIFY categoryIndexChanged)
 
 public:
-    explicit AnimeListModelProvider(QNetworkAccessManager * i, QObject *parent = nullptr);
+    explicit AnimeListModelProvider(QNetworkAccessManager *i, QObject *parent = nullptr);
 
     Q_INVOKABLE static QStringList categoryList();
 
@@ -31,7 +31,7 @@ private:
     int m_pageNumber = 1;
 
     void addAnime(Anime a) override;
-    void parseJsonReply(const QJsonDocument&) override;
+    void parseJsonReply(const QJsonDocument &) override;
     void requestAnimeList(int page, int categoryIndex);
 };
 

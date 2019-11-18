@@ -19,6 +19,7 @@ SOURCES += \
         animelistmodel.cpp \
         animelistmodelProvider.cpp \
         animelistrequest.cpp \
+        animesearchprovider.cpp \
         application.cpp \
         main.cpp
 
@@ -42,6 +43,7 @@ HEADERS += \
     animelistmodelprovider.hpp \
     animelistrequest.hpp \
     animerequest.hpp \
+    animesearchprovider.hpp \
     application.hpp
 
 DISTFILES +=

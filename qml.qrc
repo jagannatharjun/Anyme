@@ -30,5 +30,10 @@
         <file>qml/CategoryButtonDelegate.qml</file>
         <file>qml/NavigationSeperator.qml</file>
         <file>qml/NavigationObject.qml</file>
+        <file>qml/SearchNav.qml</file>
+        <file>icon/NavigationIcons/search.png</file>
+        <file>qml/SearchNavBtn.qml</file>
+        <file>qml/FilterList.qml</file>
+        <file>icon/check-24px.svg</file>
     </qresource>
 </RCC>

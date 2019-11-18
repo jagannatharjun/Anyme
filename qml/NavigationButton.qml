@@ -4,6 +4,7 @@ import QtGraphicalEffects 1.13
 NavigationObject {
 
     property string btnText: 'Home'
+    property alias icon: icon
 
     Image {
         source: 'qrc:/icon/arrow_forward-24px.png'
@@ -19,10 +20,11 @@ NavigationObject {
         source: icon
         color: parent.foreground
         anchors.fill: icon
+        rotation: icon.rotation
     }
 
     Text {
-        font.pixelSize: 26
+        font.pixelSize: 20
         font.family: fonts.bigShoulder.name
         color: parent.foreground
         x: 19.625

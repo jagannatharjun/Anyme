@@ -1,6 +1,7 @@
 #include "application.hpp"
 #include "animedetailsprovider.hpp"
 #include "animelistmodelprovider.hpp"
+#include "animesearchprovider.hpp"
 
 #include <QDebug>
 #include <QNetworkAccessManager>
@@ -32,7 +33,8 @@ protected:
 Application::Application(int &argc, char **argv)
     : QGuiApplication(argc, argv), m_networkManager(new QNetworkAccessManager(this)),
       m_animeList(new AnimeListModelProvider(m_networkManager, this)),
-      m_animeDetailsProvider(new AnimeDetailsProvider(m_networkManager, this)) {
+      m_animeDetailsProvider(new AnimeDetailsProvider(m_networkManager, this)),
+      m_animeSearchProvider(new AnimeSearchProvider(m_networkManager, this)) {
     QQuickStyle::setStyle("Material");
     setContext(m_engine.rootContext());
     load(MYQMLPATH("mainWindow.qml"));
@@ -75,6 +77,7 @@ QObject *Application::load(const QString &path, const QVector<QQmlContext::Prope
 void Application::setContext(QQmlContext *ctx) {
     ctx->setContextProperty("application", this);
     ctx->setContextProperty("animelist", m_animeList);
+    ctx->setContextProperty("animesearch", m_animeSearchProvider);
     ctx->setContextProperty("theme", &m_theme);
 }
 

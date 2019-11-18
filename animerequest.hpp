@@ -2,6 +2,7 @@
 #define REQUESTSTATUS_HPP
 
 #include <QObject>
+#include <QDebug>
 
 class AnimeRequest : public QObject {
     Q_OBJECT
@@ -51,7 +52,7 @@ protected:
             Q_ASSERT(err.isEmpty());
             m_errorString = QString{};
         }
-
+        qDebug() << __PRETTY_FUNCTION__ << m_errorString;
         emit statusChanged();
         emit errorStringChanged(err);
     }

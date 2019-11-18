@@ -75,13 +75,12 @@ Rectangle {
     }
 
     AnimeGrid {
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.top: topBar.bottom
-        anchors.topMargin: topBarShadow.verticalOffset + topBarShadow.radius
         model: animelist.model
-        id: animeGrid
+        id: animeListGrid
+        isLoading: animelist.isLoading
+        isError: animelist.isError
+        errorString: animelist.errorString
+        visible: leftBarView.currentItem == leftBarContent
 
         onAtYEndChanged: {
             // on indexChange count becomes 0 and this method is called be setCategoryIndex
@@ -89,28 +88,22 @@ Rectangle {
                 animelist.nextPage()
             }
         }
+    }
 
-        footer: Item {
-            id: animeGridNotif
-            height: animelist.isError || animelist.isLoading ? 100 : 0
-            anchors.left: parent.left
-            anchors.right: parent.right
+    AnimeGrid {
+        model: animesearch.model
+        id: animeSearchGrid
+        isLoading: animesearch.isLoading
+        isError: animesearch.isError
+        errorString: animesearch.errorString
+        visible: !animeListGrid.visible
 
-            BusyIndicator {
-                anchors.centerIn: parent
-                running: animelist.isLoading
-            }
-
-            Text {
-                anchors.centerIn: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                visible: animelist.isError
-                text: animelist.errorString
-                font.family: myFont.name
-                font.pixelSize: 24
-                color: theme.disabledText
-            }
+        onAtYEndChanged: {
+            // on indexChange count becomes 0 and this method is called be setCategoryIndex
+            if (atYEnd && count != 0) {
+                animesearch.nextPage()
+            } else
+                print('not in my watch')
         }
     }
 
@@ -154,22 +147,6 @@ Rectangle {
         //        }
         clip: true
 
-        Image {
-            x: 16
-            y: 20
-            source: "qrc:/icon/logo.png"
-            id: logoImg
-        }
-
-        Text {
-            font.family: fonts.bigShoulderRegular.name
-            font.pixelSize: 37
-            color: theme.primaryForeground
-            text: "ANIME"
-            x: 120
-            anchors.verticalCenter: logoImg.verticalCenter
-        }
-
         Component.onCompleted: state = 'COLLAPSED'
         states: [
             State {
@@ -201,12 +178,42 @@ Rectangle {
         ]
     }
 
+    StackView {
+        id: leftBarView
+        initialItem: leftBarContent
+        anchors.fill: leftBar
+        clip: true
+    }
+
+    SearchNav {
+        id: searchNav
+        clip: true
+    }
+
     Item {
-        parent: leftBar
         id: leftBarContent
-        anchors.fill: parent
+        x: 0
+        y: 0
+        width: leftBar.width
+        height: leftBar.height
 
         property int sepMargin: 2
+
+        Image {
+            x: 16
+            y: 20
+            source: "qrc:/icon/logo.png"
+            id: logoImg
+        }
+
+        Text {
+            font.family: fonts.bigShoulderRegular.name
+            font.pixelSize: 37
+            color: theme.primaryForeground
+            text: "ANIME"
+            x: 120
+            anchors.verticalCenter: logoImg.verticalCenter
+        }
 
         NavigationSeperator {
             y: 140
@@ -239,7 +246,7 @@ Rectangle {
         }
 
         ListView {
-            x:0
+            x: 0
             anchors.top: browseText.bottom
             anchors.topMargin: 6
             anchors.bottom: searchUpSep.bottom
@@ -297,6 +304,10 @@ Rectangle {
             anchors.bottomMargin: parent.sepMargin
             btnText: 'Search'
             id: searchBtn
+
+            onClicked: {
+                leftBarView.push(searchNav)
+            }
         }
 
         NavigationSeperator {

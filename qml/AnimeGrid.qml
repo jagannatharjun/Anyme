@@ -3,6 +3,17 @@ import QtQuick.Window 2.13
 import QtQuick.Controls 2.13
 
 GridView {
+    property bool isError: false
+    property bool isLoading: false
+    property string errorString: ''
+    onErrorStringChanged: print(errorString)
+
+    anchors.right: parent.right
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    anchors.top: topBar.bottom
+    anchors.topMargin: topBarShadow.verticalOffset + topBarShadow.radius
+
     visible: true
 
     onWidthChanged: {
@@ -79,6 +90,31 @@ GridView {
             hoverEnabled: true
             id: mouseArea
             onClicked: application.loadAnimeInfo(malId)
+        }
+    }
+
+    footer: Item {
+        id: animeGridNotif
+        height: 124
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: isLoading
+        }
+
+        Text {
+            height: 124
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            visible: isError
+            text: errorString
+            font.family: myFont.name
+            font.pixelSize: 24
+            color: theme.disabledText
+            wrapMode: Text.Wrap
         }
     }
 }

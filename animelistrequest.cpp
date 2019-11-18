@@ -18,6 +18,8 @@ void AnimeListRequest::request(const QUrl &url) {
     Q_ASSERT(!isLoading());
     Q_ASSERT(!m_currentRequest);
 
+    qDebug() << this << url;
+
     setStatus(RequestStatus::InProgress);
     m_currentRequest = m_networkManager->get(QNetworkRequest(url));
 
@@ -36,6 +38,8 @@ void AnimeListRequest::cancelCurrentRequest() {
 }
 
 void AnimeListRequest::jsonArrayToAnimes(const QJsonArray &animeArray) {
+    if (animeArray.isEmpty())
+        throw tr("Results are empty");
     for (const auto &animeObject : animeArray) {
         if (!animeObject.isObject()) {
             throw tr("Request Parse Error - %1").arg("isn't an object");

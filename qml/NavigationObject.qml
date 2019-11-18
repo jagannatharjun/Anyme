@@ -4,6 +4,7 @@ Rectangle {
     property color background: theme.primary
     property color foreground: theme.primaryForeground
     property bool isSelected: false
+    property alias mouseArea: mouseArea
     signal clicked
 
     onIsSelectedChanged: {
@@ -20,6 +21,7 @@ Rectangle {
     color: background
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         onClicked: btn.clicked()

@@ -16,7 +16,7 @@ class AnimeListRequest : public AnimeRequest {
 public:
     explicit AnimeListRequest(QNetworkAccessManager *i, QObject *parent = nullptr);
 
-private slots:
+private:
     void parseNetworkReply(QNetworkReply *r) override;
 
 protected:

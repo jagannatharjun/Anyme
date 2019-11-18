@@ -9,6 +9,7 @@
 class QNetworkAccessManager;
 class AnimeListModelProvider;
 class AnimeDetailsProvider;
+class AnimeSearchProvider;
 
 class Application : public QGuiApplication {
     Q_OBJECT
@@ -28,6 +29,7 @@ private:
     QNetworkAccessManager *m_networkManager;
     AnimeListModelProvider *m_animeList;
     AnimeDetailsProvider *m_animeDetailsProvider;
+    AnimeSearchProvider *m_animeSearchProvider;
 
     QObject *load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
     void setContext(QQmlContext *ctx);

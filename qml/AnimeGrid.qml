@@ -17,8 +17,8 @@ GridView {
     visible: true
 
     onWidthChanged: {
-        let normalHeight = 240
-        let normalWidth = 136
+        let normalHeight = 280
+        let normalWidth = 156
 
         let normalColumnCount = Math.floor(width / normalWidth)
         let normalRequiredWidth = normalColumnCount * normalWidth
@@ -38,7 +38,13 @@ GridView {
 
     ScrollBar.vertical: ScrollBar {
         visible: true
+        id: scrollBar
+        stepSize: .1
     }
+
+    Keys.onUpPressed: scrollBar.decrease()
+    Keys.onDownPressed: scrollBar.increase()
+    focus: true
 
     id: animeGrid
     boundsBehavior: Flickable.StopAtBounds
@@ -74,13 +80,13 @@ GridView {
                 anchors.left: img.left
                 width: parent.width
                 height: ribbionHeight
-                font.family: fonts.sansSerifBold.name
+                font.family: fonts.bigShoulder.name
                 text: title
                 color: theme.foreground
                 verticalAlignment: Text.AlignTop
                 wrapMode: Text.WordWrap
                 font.bold: true
-                font.pointSize: 10
+                font.pixelSize: 16
                 elide: Text.ElideRight
             }
         }
@@ -109,12 +115,31 @@ GridView {
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            visible: isError
-            text: errorString
+            visible: !isLoading
+            text: isError ? errorString : 'Scroll Down Or Click Me for more'
             font.family: myFont.name
             font.pixelSize: 24
             color: theme.disabledText
             wrapMode: Text.Wrap
+            MouseArea {
+                anchors.fill: parent
+                onClicked: loadMore()
+            }
+        }
+    }
+
+    onAtYEndChanged: {
+        // on indexChange count becomes 0 and this method is called by setCategoryIndex
+        if (atYEnd && count > 0) {
+            loadMore()
+        }
+    }
+
+    populate: Transition {
+        NumberAnimation {
+            properties: "x,y"
+            from: 100
+            duration: 1000
         }
     }
 }

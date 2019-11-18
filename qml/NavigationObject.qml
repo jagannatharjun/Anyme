@@ -42,8 +42,8 @@ Rectangle {
             name: "Selected"
             PropertyChanges {
                 target: btn
-                background: theme.primaryDark
-                foreground: theme.primaryDarkForeground
+                background: theme.accent
+                foreground: theme.accentForeground
             }
         }
     ]

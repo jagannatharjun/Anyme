@@ -82,11 +82,8 @@ Rectangle {
         errorString: animelist.errorString
         visible: leftBarView.currentItem == leftBarContent
 
-        onAtYEndChanged: {
-            // on indexChange count becomes 0 and this method is called be setCategoryIndex
-            if (atYEnd && count != 0) {
-                animelist.nextPage()
-            }
+        function loadMore() {
+            animelist.nextPage();
         }
     }
 
@@ -98,13 +95,10 @@ Rectangle {
         errorString: animesearch.errorString
         visible: !animeListGrid.visible
 
-        onAtYEndChanged: {
-            // on indexChange count becomes 0 and this method is called be setCategoryIndex
-            if (atYEnd && count != 0) {
-                animesearch.nextPage()
-            } else
-                print('not in my watch')
+        function loadMore() {
+            animesearch.nextPage();
         }
+
     }
 
     Component.onCompleted: animelist.categoryIndex = 0
@@ -220,18 +214,18 @@ Rectangle {
             id: animeSep
         }
 
-        NavigationButton {
-            x: 0
-            anchors.top: animeSep.bottom
-            anchors.topMargin: parent.sepMargin
-            id: homeBtn
-        }
+//        NavigationButton {
+//            x: 0
+//            anchors.top: animeSep.bottom
+//            anchors.topMargin: parent.sepMargin
+//            id: homeBtn
+//        }
 
-        NavigationSeperator {
-            anchors.top: homeBtn.bottom
-            anchors.topMargin: parent.sepMargin
-            id: homeDownSep
-        }
+//        NavigationSeperator {
+//            anchors.top: homeBtn.bottom
+//            anchors.topMargin: parent.sepMargin
+//            id: homeDownSep
+//        }
 
         Text {
             font.pixelSize: 18
@@ -239,7 +233,7 @@ Rectangle {
             color: theme.disabledText
             font.weight: Font.DemiBold
             x: 19.625
-            anchors.top: homeDownSep.bottom
+            anchors.top: animeSep.bottom
             anchors.topMargin: 4
             text: 'Browse'
             id: browseText

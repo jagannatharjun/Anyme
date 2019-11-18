@@ -6,7 +6,6 @@ GridView {
     property bool isError: false
     property bool isLoading: false
     property string errorString: ''
-    onErrorStringChanged: print(errorString)
 
     anchors.right: parent.right
     anchors.left: parent.left
@@ -115,7 +114,7 @@ GridView {
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            visible: !isLoading
+            visible: !isLoading && count > 0
             text: isError ? errorString : 'Scroll Down Or Click Me for more'
             font.family: myFont.name
             font.pixelSize: 24
@@ -132,14 +131,6 @@ GridView {
         // on indexChange count becomes 0 and this method is called by setCategoryIndex
         if (atYEnd && count > 0) {
             loadMore()
-        }
-    }
-
-    populate: Transition {
-        NumberAnimation {
-            properties: "x,y"
-            from: 100
-            duration: 1000
         }
     }
 }

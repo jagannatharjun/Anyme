@@ -13,7 +13,7 @@ Rectangle {
 
     Component.onCompleted: state = isSelected ? 'Selected' : 'Normal'
 
-    width: 256
+    width: leftBar.width
     height: 40
 
     id: btn

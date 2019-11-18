@@ -12,7 +12,8 @@ NavigationObject {
         fillMode: Image.PreserveAspectFit
         width: 16
         height: 16
-        x: 225
+        anchors.right: parent.right
+        anchors.rightMargin: 16
         id: icon
     }
 

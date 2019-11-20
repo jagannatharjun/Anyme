@@ -4,7 +4,9 @@
 #include "animesearchprovider.hpp"
 
 #include <QDebug>
+#include <QDir>
 #include <QNetworkAccessManager>
+#include <QProcess>
 #include <QQmlContext>
 #include <QQuickStyle>
 
@@ -35,6 +37,10 @@ Application::Application(int &argc, char **argv)
       m_animeList(new AnimeListModelProvider(m_networkManager, this)),
       m_animeDetailsProvider(new AnimeDetailsProvider(m_networkManager, this)),
       m_animeSearchProvider(new AnimeSearchProvider(m_networkManager, this)) {
+
+    if (!QDir("anime-dl").exists()) {
+    }
+
     QQuickStyle::setStyle("Material");
     setContext(m_engine.rootContext());
     load(MYQMLPATH("mainWindow.qml"));
@@ -95,15 +101,15 @@ Application::Theme::Theme(QObject *parent) : QQmlPropertyMap(parent) {
 
     insert("disabledText", QColor(96, 96, 96));
 
-//        insert("accent", QColor(Qt::white));
-//        insert("accentForeground", QColor(Qt::black));
+    //        insert("accent", QColor(Qt::white));
+    //        insert("accentForeground", QColor(Qt::black));
 
-//        insert("primary", QColor(Qt::white));
-//        insert("primaryDark", QColor(Qt::white));
-//        insert("primaryForeground", QColor(Qt::black));
-//        insert("primaryDarkForeground", QColor(Qt::black));
+    //        insert("primary", QColor(Qt::white));
+    //        insert("primaryDark", QColor(Qt::white));
+    //        insert("primaryForeground", QColor(Qt::black));
+    //        insert("primaryDarkForeground", QColor(Qt::black));
 
-//        insert("background", QColor(Qt::white));
-//        insert("foreground", QColor(Qt::black));
-//        insert("disabledText", QColor(96, 96, 96));
+    //        insert("background", QColor(Qt::white));
+    //        insert("foreground", QColor(Qt::black));
+    //        insert("disabledText", QColor(96, 96, 96));
 }

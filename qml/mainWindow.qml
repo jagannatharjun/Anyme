@@ -111,7 +111,6 @@ Rectangle {
         height: parent.height
         color: 'black'
         opacity: .7
-        visible: leftBar.state == 'VISIBLE'
     }
 
     MouseArea {
@@ -149,12 +148,20 @@ Rectangle {
                     target: leftBar
                     width: 0
                 }
+                PropertyChanges {
+                    target: darkOverlay
+                    opacity: 0
+                }
             },
             State {
                 name: "VISIBLE"
                 PropertyChanges {
                     target: leftBar
                     width: 256
+                }
+                PropertyChanges {
+                    target: darkOverlay
+                    opacity: .7
                 }
             }
         ]
@@ -164,9 +171,17 @@ Rectangle {
                 from: "COLLAPSED"
                 to: "VISIBLE"
                 reversible: true
+
                 NumberAnimation {
                     properties: "width"
-                    duration: 100
+                    duration: 120
+                    target: leftBar
+                }
+
+                NumberAnimation {
+                    target: darkOverlay
+                    property: "opacity"
+                    duration: 120
                 }
             }
         ]

@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         anime.cpp \
         animedetailsprovider.cpp \
+        animeepisodeprovider.cpp \
         animelistmodel.cpp \
         animelistmodelProvider.cpp \
         animelistrequest.cpp \
@@ -41,6 +42,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     anime.hpp \
     animedetailsprovider.hpp \
+    animeepisodeprovider.hpp \
     animelistmodel.hpp \
     animelistmodelprovider.hpp \
     animelistrequest.hpp \

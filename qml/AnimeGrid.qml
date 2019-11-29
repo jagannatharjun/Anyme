@@ -7,6 +7,8 @@ GridView {
     property bool isLoading: false
     property string errorString: ''
 
+    function tileClicked() {}
+
     anchors.right: parent.right
     anchors.left: parent.left
     anchors.bottom: parent.bottom
@@ -122,7 +124,7 @@ GridView {
             wrapMode: Text.Wrap
             MouseArea {
                 anchors.fill: parent
-                onClicked: loadMore()
+                onClicked: tileClicked()
             }
         }
     }

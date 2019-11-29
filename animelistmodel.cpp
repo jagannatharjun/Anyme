@@ -12,6 +12,13 @@ void AnimeListModel::addAnime(Anime anime) {
     endInsertRows();
 }
 
+void AnimeListModel::setList(QVector<Anime> animes)
+{
+    beginResetModel();
+    m_animes = std::move(animes);
+    endResetModel();
+}
+
 int AnimeListModel::rowCount(const QModelIndex &) const { return m_animes.count(); }
 
 QVariant AnimeListModel::data(const QModelIndex &index, int role) const {

@@ -26,6 +26,7 @@ public:
 
     AnimeListModel(QObject *parent = 0) : QAbstractListModel(parent) {}
     void addAnime(Anime anime);
+    void setList(QVector<Anime> animes);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 

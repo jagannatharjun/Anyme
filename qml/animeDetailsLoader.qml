@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.13
+import QtGraphicalEffects 1.13
 
 Rectangle {
     MyFonts {
@@ -48,15 +49,37 @@ Rectangle {
         }
     }
 
-    Connections {
-        target: animeReq
-        onCompleted: {
-            pageLoader.setSource(animeDetailsQmlSource)
-        }
+    AnimeDetails {
+        id: animeDetails
     }
 
-    Loader {
-        anchors.fill: parent
-        id: pageLoader
+//    GaussianBlur {
+//        source: animeDetails
+//        anchors.fill: animeDetails
+//        radius: 8
+//        samples: 16
+//    }
+
+    Popup {
+        id: popup
+        anchors.centerIn: parent
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        visible: true
     }
+
+    //    Connections {
+    //        target: animeReq
+    //        onCompleted: {
+    //            pageLoader.visible = true
+    //        }
+    //    }
+
+    //    Loader {
+    //        anchors.fill: parent
+    //        id: pageLoader
+    //        source: animeDetailsQmlSource
+    //        visible: false
+    //    }
 }

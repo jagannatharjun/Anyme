@@ -49,10 +49,10 @@ Application::Application(int &argc, char **argv)
 void Application::loadAnimeInfo(int malId) {
     qDebug() << malId;
     auto rq = m_animeDetailsProvider->requestAnimeDetails(malId);
-    auto p = load(MYQMLPATH("animeDetailsLoader.qml"),
+    auto p = load(MYQMLPATH("AnimeDetailsLoader.qml"),
                   {{"animeReq", QVariant::fromValue(rq)},
                    {"anime", QVariant::fromValue(rq->details())},
-                   {"animeDetailsQmlSource", MYQMLURL("animeDetails.qml")}});
+                   {"animeDetailsQmlSource", MYQMLURL("AnimeDetails.qml")}});
     rq->setParent(p);
 }
 
@@ -70,7 +70,6 @@ QObject *Application::load(const QString &path, const QVector<QQmlContext::Prope
         view->setSource(QUrl());
         view->engine()->clearComponentCache();
         view->setSource(QUrl::fromLocalFile(path));
-        qmlWatcher->addPath(QMLDIR);
     });
     view->resize(936, 620);
     view->show();

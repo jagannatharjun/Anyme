@@ -85,6 +85,10 @@ Rectangle {
         function loadMore() {
             animelist.nextPage();
         }
+
+        function tileClicked() {
+            application.loadAnimeInfo(malId)
+        }
     }
 
     AnimeGrid {
@@ -97,6 +101,10 @@ Rectangle {
 
         function loadMore() {
             animesearch.nextPage();
+        }
+
+        function tileClicked() {
+            application.loadAnimeInfo(malId)
         }
 
     }

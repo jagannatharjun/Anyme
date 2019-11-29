@@ -33,9 +33,6 @@ private:
     RequestStatus m_status = RequestStatus::Completed;
     QString m_errorString;
 
-protected slots:
-    virtual void parseNetworkReply(class QNetworkReply *) = 0;
-
 protected:
 
     void setStatus(RequestStatus status, const QString &err = {}) {
@@ -52,7 +49,7 @@ protected:
             Q_ASSERT(err.isEmpty());
             m_errorString = QString{};
         }
-        qDebug() << __PRETTY_FUNCTION__ << m_errorString;
+
         emit statusChanged();
         emit errorStringChanged(err);
     }

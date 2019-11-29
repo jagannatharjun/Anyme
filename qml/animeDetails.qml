@@ -27,42 +27,19 @@ Rectangle {
     color: theme.background
     property alias myFont: fonts.bigShoulder
 
-
-    Rectangle {
-        anchors.fill: parent
-        z: 10
-        color: theme.background
-        visible: animeReq.isLoading || animeReq.isError
-
-        BusyIndicator {
-            anchors.centerIn: parent
-            running: animeReq.isLoading
-        }
-
-        Text {
-            anchors.centerIn: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            visible: animeReq.isError
-            text: animeReq.errorString
-            font.family: myFont.name
-            font.pixelSize: 24
-            color: theme.disabledText
-        }
-    }
-
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         width: 280
-        color: theme.accent
+        color: theme.primary
         id: leftBar
 
         Column {
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            spacing: 6
 
             Image {
                 source: anime.imageUrl
@@ -73,11 +50,10 @@ Rectangle {
             Text {
                 width: animeImage.width
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 4
                 text: anime.title
                 font.family: myFont.name
                 font.pointSize: 18
-                color: theme.accentForeground
+                color: theme.primaryForeground
                 horizontalAlignment: Text.AlignHCenter
                 id: animeTitle
                 wrapMode: Text.WordWrap
@@ -88,8 +64,8 @@ Rectangle {
     DropShadow {
         source: leftBar
         anchors.fill: leftBar
-        radius: 16
-        samples: 33
+        radius: 8
+        samples: 17
         transparentBorder: true
     }
 
@@ -111,7 +87,7 @@ Rectangle {
         font.family: bigShoulderRegular.name
         font.pixelSize: 21
         font.weight: Font.Medium
-        color: theme.accent
+        color: theme.primary
         id: ratingText
     }
 
@@ -121,7 +97,7 @@ Rectangle {
         width: ratingText.width + (border.width * 2) + 4
         height: ratingText.height + (border.width * 2) + 2
         color: 'transparent'
-        border.color: theme.accent
+        border.color: ratingText.color
         border.width: 2
     }
 
@@ -143,9 +119,9 @@ Rectangle {
             model: ['Series', 'Episodes']
             Text {
                 text: modelData
-                font.pixelSize: 37
+                font.pixelSize: 34
                 font.family: bigShoulderRegular.name
-                font.weight: Font.Bold
+                font.weight: Font.DemiBold
 
                 color: topLabels.selectedIndex === index ? theme.foreground : theme.disabledText
                 MouseArea {

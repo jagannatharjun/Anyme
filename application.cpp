@@ -10,15 +10,41 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 
-#define LIVE_QML
+
+#ifdef DEFINE_STD_REVERSE
+
+static inline void _Reverse_tail(unsigned long long * _First, unsigned long long * _Last) throw() {
+  for (; _First != _Last && _First != --_Last; ++_First) {
+    const auto _Temp = *_First;
+    *_First = *_Last;
+    *_Last = _Temp;
+  }
+}
+extern "C"  __declspec(noalias) void __cdecl __std_reverse_trivially_swappable_8(void * _First, void * _Last) noexcept {
+  _Reverse_tail(static_cast<unsigned long long *>(_First), static_cast<unsigned long long *>(_Last));
+}
+
+extern "C"  __declspec(noalias) void __cdecl __std_reverse_trivially_swappable_4(void * _First, void * _Last) noexcept {
+  _Reverse_tail(static_cast<unsigned long long *>(_First), static_cast<unsigned long long *>(_Last));
+}
+
+#endif
+
+//#define LIVE_QML
 
 #ifdef LIVE_QML
 #include <QFileSystemWatcher>
-#include <QQuickView>
 #define QMLDIR "E:/Cpp/Projects/Gui/anime/qml/"
 #define MYQMLPATH(FILE) QMLDIR FILE
 #define MYQMLURL(FILE) QUrl::fromLocalFile(MYQMLPATH(FILE))
 static QFileSystemWatcher *qmlWatcher;
+
+#else
+#define MYQMLPATH(FILE) "qrc:///qml/" FILE	
+#define MYQMLURL(FILE) QUrl(MYQMLPATH(FILE))
+#endif
+
+#include <QQuickView>
 
 class MyQuickView : public QQuickView {
 protected:
@@ -29,8 +55,6 @@ protected:
         return QQuickView::event(event);
     }
 };
-
-#endif
 
 Application::Application(int &argc, char **argv)
     : QGuiApplication(argc, argv), m_networkManager(new QNetworkAccessManager(this)),
@@ -43,7 +67,8 @@ Application::Application(int &argc, char **argv)
 
     QQuickStyle::setStyle("Material");
     setContext(m_engine.rootContext());
-    load(MYQMLPATH("mainWindow.qml"));
+    //load(MYQMLPATH("mainWindow.qml"));
+	load("qrc:///qml/MainWindow.qml");
 }
 
 void Application::loadAnimeInfo(int malId) {
@@ -75,7 +100,13 @@ QObject *Application::load(const QString &path, const QVector<QQmlContext::Prope
     view->show();
     return view;
 #else
-    static_assert(0, "lol");
+    auto view = new MyQuickView();
+    view->rootContext()->setContextProperties(props);
+    setContext(view->rootContext());
+    view->setSource(path);
+    view->resize(936, 620);
+    view->show();
+    return view;	
 #endif
 }
 

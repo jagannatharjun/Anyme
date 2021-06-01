@@ -1,6 +1,7 @@
 ﻿#ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
+#include <QVector>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -31,7 +32,7 @@ private:
     AnimeDetailsProvider *m_animeDetailsProvider;
     AnimeSearchProvider *m_animeSearchProvider;
 
-    QObject *load(const QString &path, const QVector<QQmlContext::PropertyPair> &props = {});
+    QObject *load(const QString &path, const QVector<QQmlContext::PropertyPair> &props =  QVector<QQmlContext::PropertyPair> {});
     void setContext(QQmlContext *ctx);
 };
 

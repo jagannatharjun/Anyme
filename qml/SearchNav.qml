@@ -1,7 +1,5 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-
-import QtQuick.Dialogs 1.1
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 Item {
     property int sepMargin: 6
@@ -169,9 +167,11 @@ Item {
         id: startSearchBtn
     }
 
-    MessageDialog {
+//FIXME
+    Popup {
         id: errorDialog
-        title: "Error"
-        text: "Invalid Keyword for Seach. A Keyword should contain more then 2 words or empty to do filter based searching"
+        modal: true
+		//title: "Error"
+        //text: "Invalid Keyword for Seach. A Keyword should contain more then 2 words or empty to do filter based searching"
     }
 }

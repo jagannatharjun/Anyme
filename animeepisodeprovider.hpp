@@ -23,6 +23,7 @@ class EpisodeUrl {
     Q_PROPERTY(QString title READ title CONSTANT)
 
 public:
+	EpisodeUrl() = default;
     EpisodeUrl(QString url, QString title) : m_url(url), m_title(title) {}
 
     QString url() const { return m_url; }
@@ -40,6 +41,7 @@ class Episode {
     Q_PROPERTY(QString date READ date CONSTANT)
 
 public:
+	Episode() = default;
     Episode(QVector<EpisodeUrl> urls, QString title, QString date)
         : m_urls{urls}, m_title{title}, m_date{date} {}
 
@@ -62,6 +64,7 @@ class PluginAnime {
     Q_PROPERTY(QString imageUrl READ imageUrl CONSTANT)
 
 public:
+	PluginAnime() = default;
     PluginAnime(QString title, QString synopsis, QString url, QByteArray imageData)
         : m_title{title}, m_synopsis{synopsis}, m_url{url}, m_imageData{imageData} {}
 

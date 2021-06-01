@@ -1,6 +1,6 @@
 import QtQuick 2.0
-import QtGraphicalEffects 1.13
-import QtQuick.Controls 2.13
+import QtGraphicalEffects 1.12
+import QtQuick.Controls 2.12
 
 Rectangle {
     anchors.fill: parent
